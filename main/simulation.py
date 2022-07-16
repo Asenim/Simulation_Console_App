@@ -7,11 +7,11 @@
 
 from main import map_matrix
 from main import render
-from main.actions.generation import generation_tree
-from main.actions.generation import generation_rock
-from main.actions.generation import generation_grass
-from main.actions.generation import generation_herbivore
-from main.actions.generation import generation_predator
+from main.actions.generation_actions import generation_tree
+from main.actions.generation_actions import generation_rock
+from main.actions.generation_actions import generation_grass
+from main.actions.generation_actions import generation_herbivore
+from main.actions.generation_actions import generation_predator
 
 
 class Simulation:
