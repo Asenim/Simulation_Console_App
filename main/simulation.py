@@ -45,7 +45,26 @@ class Simulation:
 		Временный метод показывающий
 		количество всех объектов на матрице
 		"""
+		# Словарь с объектами матрицы
+		dict_matrix_object = {
+			self.gen_grass.G.sprite: 0,
+			self.gen_tree.T.sprite: 0,
+			self.gen_rock.R.sprite: 0,
+			self.gen_predator.predator.sprite: 0,
+			self.gen_herbivore.herbivore.sprite: 0
+		}
 		# Подсчёт объектов на матрице
+		for i in range(self.height):
+			for j in range(self.width):
+				for key in dict_matrix_object:
+					if self.matrix.map[i][j] == key:
+						dict_matrix_object[key] = dict_matrix_object[key] + 1
+
+		# Вывод количества объектов на матрице
+		for key in dict_matrix_object:
+			print(f'{key} = {dict_matrix_object[key]}')
+
+		"""
 		for i in range(self.height):
 			for j in range(self.width):
 				if self.matrix.map[i][j] == self.gen_grass.G.sprite:
@@ -73,6 +92,7 @@ class Simulation:
 		self.gen_rock.count_rock = 0
 		self.gen_herbivore.count_herbivore = 0
 		self.gen_predator.count_predator = 0
+		"""
 
 
 if __name__ == '__main__':
