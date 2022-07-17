@@ -7,13 +7,11 @@ from main.actions import actions
 
 
 class Generate(actions.Actions):
-	def __init__(self, height, width, matrix):
-		self.height = height
-		self.width = width
+	def __init__(self, matrix):
 		self.matrix = matrix
 
 		# Количество клеток которое есть в матрице
-		self.matrix_cells = self.height * self.width
+		self.matrix_cells = self.matrix.height * self.matrix.width
 
 	def generation(self):
 		pass

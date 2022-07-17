@@ -17,8 +17,8 @@ import random
 
 
 class GenerationTree(generate.Generate):
-	def __init__(self, height, width, matrix):
-		super().__init__(height, width, matrix)
+	def __init__(self, matrix):
+		super().__init__(matrix)
 		# Необходимое количество дерева на карте в зависимости от размера матрицы
 		self.amount_tree = int(self.matrix_cells * 0.2)
 		# Счетчик дерева
@@ -44,8 +44,8 @@ class GenerationTree(generate.Generate):
 		# Основной цикл Генерации
 		while True:
 			# Генерация случайных индексов матрицы
-			num_1 = random.randint(0, self.height - 1)
-			num_2 = random.randint(0, self.width - 1)
+			num_1 = random.randint(0, self.matrix.height - 1)
+			num_2 = random.randint(0, self.matrix.width - 1)
 
 			# Условие генерации Деревьев на матрице
 			if self.matrix.map[num_1][num_2] == 0:

@@ -28,11 +28,11 @@ class Map:
 				self.elements.append(0)
 			self.map.append(self.elements)
 
+	"""
 	def print_map_matrix(self):
-		"""
-		Отрисовка нашей матрицы
-		"""
+		# Отрисовка нашей матрицы
 		for i in range(self.height):
 			for j in range(self.width):
 				print(str(self.map[i][j]).ljust(3), end=' ')
 			print()
+	"""

@@ -33,8 +33,8 @@ import random
 
 
 class GenerationHerbivore(generate.Generate):
-	def __init__(self, height, width, matrix):
-		super().__init__(height, width, matrix)
+	def __init__(self, matrix):
+		super().__init__(matrix)
 		# Количество травоядных
 		self.amount_herbivore = 2
 		# Счётчик травоядных
@@ -56,8 +56,8 @@ class GenerationHerbivore(generate.Generate):
 		# Основной цикл генерации
 		while True:
 			# Генерация случайных индексов для матрицы
-			num_1 = random.randint(0, self.height - 1)
-			num_2 = random.randint(0, self.width - 1)
+			num_1 = random.randint(0, self.matrix.height - 1)
+			num_2 = random.randint(0, self.matrix.width - 1)
 
 			# Условие генерации Травы на матрице
 			if self.matrix.map[num_1][num_2] == 0:

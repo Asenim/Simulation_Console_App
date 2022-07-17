@@ -11,5 +11,11 @@ class Render:
 		self.width = width
 		self.matrix = matrix
 
-		# Выводим пустую матрицу на экран
-		self.matrix.print_map_matrix()
+	def print_map_matrix(self):
+		"""
+		Отрисовка нашей матрицы
+		"""
+		for i in range(self.height):
+			for j in range(self.width):
+				print(str(self.matrix.map[i][j]).ljust(3), end=' ')
+			print()

@@ -4,8 +4,8 @@ import random
 
 
 class GenerationPredator(generate.Generate):
-	def __init__(self, height, width, matrix):
-		super().__init__(height, width, matrix)
+	def __init__(self, matrix):
+		super().__init__(matrix)
 		# Максимальное Количество хищников на карте
 		self.amount_predator = 1
 		# Счетчик хищников
@@ -19,8 +19,8 @@ class GenerationPredator(generate.Generate):
 
 	def generation(self):
 		# Проверяем количество хищников на матрице
-		for i in range(self.height):
-			for j in range(self.width):
+		for i in range(self.matrix.height):
+			for j in range(self.matrix.width):
 				if self.matrix.map[i][j] == self.predator.sprite:
 					self.count_predator = self.count_predator + 1
 
@@ -32,8 +32,8 @@ class GenerationPredator(generate.Generate):
 
 		# Основной цикл генерации
 		while True:
-			num_1 = random.randint(0, self.height - 1)
-			num_2 = random.randint(0, self.width - 1)
+			num_1 = random.randint(0, self.matrix.height - 1)
+			num_2 = random.randint(0, self.matrix.width - 1)
 
 			# Условие генерации на матрице
 			if self.matrix.map[num_1][num_2] == 0:

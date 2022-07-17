@@ -17,8 +17,8 @@ import random
 
 
 class GenerationGrass(generate.Generate):
-	def __init__(self, height, width, matrix):
-		super().__init__(height, width, matrix)
+	def __init__(self, matrix):
+		super().__init__(matrix)
 		# Необходимое количество травы на карте в зависимости от размера матрицы
 		self.amount_grass = int(self.matrix_cells * 0.3)
 		# Счётчик травы
@@ -36,8 +36,8 @@ class GenerationGrass(generate.Generate):
 		заполняет список в init
 		"""
 		# Проверяем количество травы на матрице
-		for i in range(self.height):
-			for j in range(self.width):
+		for i in range(self.matrix.height):
+			for j in range(self.matrix.width):
 				if self.matrix.map[i][j] == self.G.sprite:
 					self.count_grass = self.count_grass + 1
 
@@ -51,8 +51,8 @@ class GenerationGrass(generate.Generate):
 		# Основной цикл генерации
 		while True:
 			# Генерация случайных индексов для матрицы
-			num_1 = random.randint(0, self.height - 1)
-			num_2 = random.randint(0, self.width - 1)
+			num_1 = random.randint(0, self.matrix.height - 1)
+			num_2 = random.randint(0, self.matrix.width - 1)
 
 			# Условие генерации Травы на матрице
 			if self.matrix.map[num_1][num_2] == 0:
@@ -73,8 +73,8 @@ class GenerationGrass(generate.Generate):
 		(Не задействованный метод)
 		"""
 		# Проверяем количество травы
-		for i in range(self.height):
-			for j in range(self.width):
+		for i in range(self.matrix.height):
+			for j in range(self.matrix.width):
 				if self.matrix.map[i][j] == self.G.sprite:
 					self.count_grass = self.count_grass + 1
 
@@ -86,8 +86,8 @@ class GenerationGrass(generate.Generate):
 
 			while True:
 				# Генерация случайных индексов для матрицы
-				num_1 = random.randint(0, self.height - 1)
-				num_2 = random.randint(0, self.width - 1)
+				num_1 = random.randint(0, self.matrix.height - 1)
+				num_2 = random.randint(0, self.matrix.width - 1)
 
 				# Условие генерации Травы на матрице
 				if self.matrix.map[num_1][num_2] == 0:
