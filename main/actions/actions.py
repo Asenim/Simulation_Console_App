@@ -5,4 +5,9 @@
 
 
 class Actions:
-	pass
+	def perform(self):
+		"""
+		Абстрактный метод
+		"""
+		pass
+
