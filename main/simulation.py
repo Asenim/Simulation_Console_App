@@ -22,7 +22,7 @@ class Simulation:
 
 		# Создаём матрицу и рендер
 		self.matrix = map_matrix.Map(self.height, self.width)
-		self.renderer = render.Render(self.height, self.width, self.matrix)
+		self.renderer = render.Render(self.matrix)
 		# Отрисовываем пустую матрицу
 		self.renderer.print_map_matrix()
 
@@ -57,9 +57,9 @@ class Simulation:
 		}
 		"""
 		# Алгоритм заполнение словаря
-		for actions in self.list_actions:
-			if actions not in dict_matrix_object:
-				dict_matrix_object[actions] = 0
+		for action in self.list_actions:
+			if action.object.sprite not in dict_matrix_object:
+				dict_matrix_object[action.object.sprite] = 0
 		"""
 
 		# Подсчёт объектов на матрице

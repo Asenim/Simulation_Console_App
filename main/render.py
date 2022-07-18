@@ -5,17 +5,15 @@
 
 
 class Render:
-	def __init__(self, height, width, matrix):
+	def __init__(self, matrix):
 		# Принимаем параметры
-		self.height = height
-		self.width = width
 		self.matrix = matrix
 
 	def print_map_matrix(self):
 		"""
 		Отрисовка нашей матрицы
 		"""
-		for i in range(self.height):
-			for j in range(self.width):
+		for i in range(self.matrix.height):
+			for j in range(self.matrix.width):
 				print(str(self.matrix.map[i][j]).ljust(3), end=' ')
 			print()

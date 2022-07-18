@@ -22,4 +22,24 @@ for i in range(3):
 			matrix.map[generate_gross_2][generate_gross_2] = T.sprite
 
 
-matrix.print_map_matrix()
+class Exsperimental:
+	def __init__(self):
+		self.print_line()
+
+	def vizov_s_verhu(self):
+		print('Эта функция вызов с верху')
+		self.print_line()
+
+	def print_line(self):
+		print('Эта функция печати')
+		print('Функция сработала')
+		print()
+
+	def vizov_s_nizu(self):
+		print('Эта функция вызов с низу')
+		self.print_line()
+
+
+Exs = Exsperimental()
+Exs.vizov_s_nizu()
+Exs.vizov_s_verhu()
