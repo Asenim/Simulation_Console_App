@@ -20,12 +20,12 @@ class GenerationTree(generate.Generate):
 	def __init__(self, matrix):
 		super().__init__(matrix)
 		# Необходимое количество дерева на карте в зависимости от размера матрицы
-		self.amount_tree = int(self.matrix_cells * 0.2)
+		self.object_quantity = int(self.matrix_cells * 0.2)
 		# Счетчик дерева
-		self.count_tree = 0
+		self.count_object = 0
 
 		# Создаём объект класса дерево
-		self.T = tree.Tree()
+		self.object = tree.Tree()
 		# Список, который будет заполняться деревом
 		self.list_tree = []
 
@@ -33,11 +33,11 @@ class GenerationTree(generate.Generate):
 		"""
 		Метод, который генерирует статичные
 		объекты в соответствии с размером матрицы и
-		заполняет список в init
+		заполняет список в init (На удаление)
 		"""
 		# Генерация дерева
-		for i in range(self.amount_tree):
-			self.list_tree.append(self.T.sprite)
+		for i in range(self.object_quantity):
+			self.list_tree.append(self.object.sprite)
 		print(f'Список Дерева - {self.list_tree}')
 		print(f'В списке {len(self.list_tree)} Дерева до размещения на матрице')
 
@@ -57,3 +57,9 @@ class GenerationTree(generate.Generate):
 			# Условие выхода из цикла
 			if len(self.list_tree) <= 0:
 				break
+
+	def spawn_object(self):
+		self.spawn()
+
+	def perform(self):
+		self.spawn()

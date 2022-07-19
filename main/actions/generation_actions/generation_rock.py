@@ -20,12 +20,12 @@ class GenerationRock(generate.Generate):
 	def __init__(self, matrix):
 		super().__init__(matrix)
 		# Необходимое количество камня на карте
-		self.amount_rock = int(self.matrix_cells * 0.1)
+		self.object_quantity = int(self.matrix_cells * 0.1)
 		# Счётчик камня
-		self.count_rock = 0
+		self.count_object = 0
 
 		# Создаём объект класса Камень
-		self.R = rock.Rock()
+		self.object = rock.Rock()
 		# Список, который будет заполняться камнем
 		self.list_rock = []
 
@@ -33,11 +33,11 @@ class GenerationRock(generate.Generate):
 		"""
 		Метод, который генерирует статичные
 		объекты в соответствии с размером матрицы и
-		заполняет список в init
+		заполняет список в init (На удаление)
 		"""
 		# Генерация дерева
-		for i in range(self.amount_rock):
-			self.list_rock.append(self.R.sprite)
+		for i in range(self.object_quantity):
+			self.list_rock.append(self.object.sprite)
 		print(f'Список Камня - {self.list_rock}')
 		print(f'В списке {len(self.list_rock)} Камня до размещения на матрице')
 
@@ -57,3 +57,9 @@ class GenerationRock(generate.Generate):
 			# Условие выхода из цикла
 			if len(self.list_rock) <= 0:
 				break
+
+	def spawn_object(self):
+		self.spawn()
+
+	def perform(self):
+		self.spawn()
