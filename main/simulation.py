@@ -1,9 +1,3 @@
-"""
-Головной класс позволяющий взаимодействовать с пользователем.
-Запрашивает пользовательский ввод.
-Генерирует матрицу.
-Производит рендер.
-"""
 
 from main import map_matrix
 from main import render
@@ -35,12 +29,10 @@ class Simulation:
 		# Помещаем их в список
 		self.list_actions = [self.gen_tree, self.gen_rock, self.gen_grass, self.gen_herbivore, self.gen_predator]
 
-		# # Вызываем предварительную генерацию перед началом игры
-		# for i in self.list_actions:
-		# 	i.generation()
+		# Вызываем предварительную генерацию перед началом игры
+		for i in self.list_actions:
+			i.perform()
 		print()
-		self.gen_tree.perform()
-		self.gen_rock.perform()
 
 		# Отрисовываем заполненную матрицу рендер
 		self.renderer.print_map_matrix()
@@ -51,22 +43,15 @@ class Simulation:
 		количество всех объектов на матрице
 		"""
 		# Словарь с объектами матрицы
-		dict_matrix_object = {
-			self.gen_grass.G.sprite: 0,
-			self.gen_tree.object.sprite: 0,
-			self.gen_rock.object.sprite: 0,
-			self.gen_predator.predator.sprite: 0,
-			self.gen_herbivore.herbivore.sprite: 0
-		}
-		"""
+		dict_matrix_object = {}
+
 		# Алгоритм заполнение словаря
 		for action in self.list_actions:
 			if action.object.sprite not in dict_matrix_object:
 				dict_matrix_object[action.object.sprite] = 0
-		"""
 
 		print()
-		# Подсчёт объектов на матрице
+		# Подсчёт объектов на матрице для словаря
 		for i in range(self.height):
 			for j in range(self.width):
 				for key in dict_matrix_object:

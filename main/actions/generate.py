@@ -23,10 +23,10 @@ class Generate(actions.Actions):
 
 	def perform(self):
 		"""
-		Всё ещё абстрактный
-		служит для вызова остальных методов
-		класса
+		Метод позволяющий вызывать
+		генерацию.
 		"""
+		self.spawn()
 
 	def spawn(self):
 		"""
@@ -40,6 +40,7 @@ class Generate(actions.Actions):
 			for i in range(self.matrix.height):
 				for j in range(self.matrix.width):
 					if self.matrix.map[i][j] == self.object.sprite:
+						# После каждой генерации объектов на матрице - счётчик обнуляется
 						self.count_object = self.count_object + 1
 
 			# Если Количество объектов на матрице меньше чем необходимо
@@ -48,21 +49,20 @@ class Generate(actions.Actions):
 				num_1 = random.randint(0, self.matrix.height - 1)
 				num_2 = random.randint(0, self.matrix.width - 1)
 
-				# Условие генерации объектов на матрице
-				if self.matrix.map[num_1][num_2] == 0:
-					# Объекты располагаются на карте
-					self.matrix.map[num_1][num_2] = self.object.sprite
-				# Обнуляем счётчик для корректной работы условий
-				self.count_object = 0
+				self.spawn_object(num_1, num_2)
 
 			# Условие выхода из цикла
 			else:
 				self.count_object = 0
 				break
 
-	def spawn_object(self):
+	def spawn_object(self, num_1, num_2):
+
 		"""
 		Абстрактный метод класса.
 		В нем будет реализован алгоритм расположения
 		объектов на матрице.
+		Реализация данного метода происходит
+		в классах генерации объектов.
 		"""
+		pass

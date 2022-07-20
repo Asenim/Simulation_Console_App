@@ -7,40 +7,23 @@ class GenerationPredator(generate.Generate):
 	def __init__(self, matrix):
 		super().__init__(matrix)
 		# Максимальное Количество хищников на карте
-		self.amount_predator = 1
+		self.object_quantity = 1
 		# Счетчик хищников
-		self.count_predator = 0
-		self.predator = predator.Preadator(speed=3, hit_point=5, max_hit_point=5,
-		                                   gender=random.choice(['male', 'female']),
-		                                   successful_hunting=3, restore_hp_successful_hunt=1,
-		                                   range_attack=2)
-		# Список, который будет заполняться хищниками
-		self.list_predator = []
+		self.count_object = 0
+		# Объект для корректной работы словаря в information и цикла в generate
+		self.object = predator.Preadator(speed=random.randint(2, 4), hit_point=5, max_hit_point=5,
+		                                 gender=random.choice(['male', 'female']),
+		                                 successful_hunting=3, restore_hp_successful_hunt=random.randint(1, 2),
+		                                 range_attack=random.randint(1, 2))
 
-	def generation(self):
-		# Проверяем количество хищников на матрице
-		for i in range(self.matrix.height):
-			for j in range(self.matrix.width):
-				if self.matrix.map[i][j] == self.predator.sprite:
-					self.count_predator = self.count_predator + 1
-
-		# Генерация хищников
-		while len(self.list_predator) <= self.amount_predator-1:
-			self.list_predator.append(self.predator.sprite)
-		print(f'Список Хищников - {self.list_predator}')
-		print(f'В списке {len(self.list_predator)} Хищников до размещения на матрице')
-
-		# Основной цикл генерации
-		while True:
-			num_1 = random.randint(0, self.matrix.height - 1)
-			num_2 = random.randint(0, self.matrix.width - 1)
-
-			# Условие генерации на матрице
-			if self.matrix.map[num_1][num_2] == 0:
-				self.matrix.map[num_1][num_2] = self.list_predator[-1]
-				self.list_predator.pop(-1)
-
-			# Условие выхода из цикла
-			if len(self.list_predator) <= 0:
-				self.count_predator = 0
-				break
+	def spawn_object(self, num_1, num_2):
+		# Условие генерации объектов на матрице
+		if self.matrix.map[num_1][num_2] == 0:
+			# Расположение объектов на карте (Объект со случайными характеристиками)
+			self.matrix.map[num_1][num_2] = predator.Preadator(speed=random.randint(2, 4), hit_point=5, max_hit_point=5,
+			                                                   gender=random.choice(['male', 'female']),
+			                                                   successful_hunting=3,
+			                                                   restore_hp_successful_hunt=random.randint(1, 2),
+			                                                   range_attack=random.randint(1, 2)).sprite
+		# После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
+		self.count_object = 0
