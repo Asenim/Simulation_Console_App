@@ -48,6 +48,24 @@ class Generate(actions.Actions):
 		y = random.randint(0, self.matrix.width - 1)
 		return x, y
 
+	def spawn_object(self, num_1, num_2):
+		"""
+		Абстрактный метод класса.
+		В нем будет реализован алгоритм расположения
+		объектов на матрице.
+		Реализация данного метода происходит
+		в классах генерации объектов.
+		"""
+		pass
+
+	def if_dynamic_spawn(self):
+		"""
+		Метод - условие с помощью которого
+		мы будем проверять необходимую границу
+		для создания дополнительных объектов
+		"""
+		return self.count_object < (self.object_quantity//2)
+
 	def spawn(self):
 		"""
 		Метод в котором будет реализован алгоритм
@@ -71,12 +89,10 @@ class Generate(actions.Actions):
 				self.count_object = 0
 				break
 
-	def spawn_object(self, num_1, num_2):
+	def dynamic_spawn(self):
 		"""
-		Абстрактный метод класса.
-		В нем будет реализован алгоритм расположения
-		объектов на матрице.
-		Реализация данного метода происходит
-		в классах генерации объектов.
+		Метод, который позволит создавать
+		выбранные объекты если их недостаточно на карте
 		"""
-		pass
+		if self.if_dynamic_spawn():
+			self.spawn()

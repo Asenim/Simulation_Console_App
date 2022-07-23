@@ -1,4 +1,3 @@
-
 from main import map_matrix
 from main import render
 from main.actions.generation_actions import generation_tree
