@@ -28,6 +28,26 @@ class Generate(actions.Actions):
 		"""
 		self.spawn()
 
+	def count_current(self):
+		"""
+		Метод для подсчёта объектов на матрице
+		"""
+		for i in range(self.matrix.height):
+			for j in range(self.matrix.width):
+				if self.matrix.map[i][j] == self.object.sprite:
+					# После каждой генерации объектов на матрице - счётчик обнуляется
+					self.count_object = self.count_object + 1
+
+	def random_coordinates(self):
+		"""
+		Метод позволяющий генерировать
+		случайные координаты для наших объектов.
+		:return x, y - возвращает два числа.
+		"""
+		x = random.randint(0, self.matrix.height - 1)
+		y = random.randint(0, self.matrix.width - 1)
+		return x, y
+
 	def spawn(self):
 		"""
 		Метод в котором будет реализован алгоритм
@@ -37,18 +57,13 @@ class Generate(actions.Actions):
 		# Основной цикл Генерации
 		while True:
 			# Подсчёт количества объектов на матрице
-			for i in range(self.matrix.height):
-				for j in range(self.matrix.width):
-					if self.matrix.map[i][j] == self.object.sprite:
-						# После каждой генерации объектов на матрице - счётчик обнуляется
-						self.count_object = self.count_object + 1
+			self.count_current()
 
 			# Если Количество объектов на матрице меньше чем необходимо
 			if self.count_object < self.object_quantity:
 				# Генерация случайных индексов матрицы
-				num_1 = random.randint(0, self.matrix.height - 1)
-				num_2 = random.randint(0, self.matrix.width - 1)
-
+				num_1, num_2 = self.random_coordinates()
+				# Алгоритм генерации самих объектов на матрице
 				self.spawn_object(num_1, num_2)
 
 			# Условие выхода из цикла
@@ -57,7 +72,6 @@ class Generate(actions.Actions):
 				break
 
 	def spawn_object(self, num_1, num_2):
-
 		"""
 		Абстрактный метод класса.
 		В нем будет реализован алгоритм расположения
