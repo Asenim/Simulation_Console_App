@@ -1,17 +1,5 @@
-"""
-Класс для отрисовки карты с помощью произвольной матрицы
-Класс принимает только число
-и инициализирует матрицу с заданными параметрами
-	height = высота матрицы
-	width = ширина матрицы
-
-Метод print_map_matrix - служит для вывода и отрисовки нашей матрицы
-"""
-
-
-class Map:
+class MapMatrix:
 	def __init__(self, height, width):
-
 		# Проверка на передачу элементов
 		if isinstance(height, int) and isinstance(width, int):
 			self.height = height

@@ -1,4 +1,4 @@
-from main import map_matrix
+from main.maps import map_matrix
 from main import render
 from main.actions.generation_actions import generation_tree
 from main.actions.generation_actions import generation_rock
@@ -14,7 +14,7 @@ class Simulation:
 		self.width = width
 
 		# Создаём матрицу и рендер
-		self.matrix = map_matrix.Map(self.height, self.width)
+		self.matrix = map_matrix.MapMatrix(self.height, self.width)
 		self.renderer = render.Render(self.matrix)
 		# Отрисовываем пустую матрицу
 		self.renderer.print_map_matrix()

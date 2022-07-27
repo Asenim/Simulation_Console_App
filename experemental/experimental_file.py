@@ -1,12 +1,12 @@
 from main.static_objects import grass
-from main import map_matrix
+from main.maps import map_matrix
 import random
 
 # Создаём траву
 T = grass.Grass()
 
 # Создаём матрицу
-matrix = map_matrix.Map(3, 4)
+matrix = map_matrix.MapMatrix(3, 4)
 
 # Генерируем координаты травы
 generate_gross = random.randint(0, 2)
