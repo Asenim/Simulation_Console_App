@@ -34,8 +34,11 @@ class Generate(actions.Actions):
 		"""
 		for i in range(self.matrix.height):
 			for j in range(self.matrix.width):
-				if self.matrix.map[i][j] == self.object.sprite:
-					# После каждой генерации объектов на матрице - счётчик обнуляется
+				# Временный алгоритм счётчика
+				coordinates = (i, j)
+				if coordinates not in self.matrix.map:
+					pass
+				elif self.matrix.map[i, j] == self.object.sprite:
 					self.count_object = self.count_object + 1
 
 	def random_coordinates(self):

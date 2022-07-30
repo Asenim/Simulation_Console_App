@@ -13,9 +13,10 @@ class GenerationTree(generate.Generate):
 		self.object = tree.Tree()
 
 	def spawn_object(self, num_1, num_2):
+		coordinates = (num_1, num_2)
 		# Условие генерации объектов на матрице
-		if self.matrix.map[num_1][num_2] == 0:
-			# Объекты располагаются на карте
-			self.matrix.map[num_1][num_2] = tree.Tree().sprite
+		if coordinates not in self.matrix.map:
+			self.matrix.map[coordinates] = tree.Tree().sprite
+
 		# После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
 		self.count_object = 0

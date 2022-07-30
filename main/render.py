@@ -9,11 +9,19 @@ class Render:
 		# Принимаем параметры
 		self.matrix = matrix
 
-	def print_map_matrix(self):
+	def print_map(self):
 		"""
-		Отрисовка нашей матрицы
+		Отрисовка нашего словаря
 		"""
+		# Основной алгоритм отрисовки
 		for i in range(self.matrix.height):
 			for j in range(self.matrix.width):
-				print(str(self.matrix.map[i][j]).ljust(3), end=' ')
+				coordinates = (i, j)
+				line = ''
+				if coordinates not in self.matrix.map:
+					line = line + ' '
+				else:
+					line = line + self.matrix.map[i, j]
+
+				print(line.ljust(3), end=' ')
 			print()

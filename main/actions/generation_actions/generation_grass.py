@@ -13,9 +13,10 @@ class GenerationGrass(generate.Generate):
 		self.object = grass.Grass()
 
 	def spawn_object(self, num_1, num_2):
+		coordinates = (num_1, num_2)
 		# Условие генерации объектов на матрице
-		if self.matrix.map[num_1][num_2] == 0:
-			# Объекты располагаются на карте
-			self.matrix.map[num_1][num_2] = grass.Grass().sprite
+		if coordinates not in self.matrix.map:
+			self.matrix.map[coordinates] = grass.Grass().sprite
+
 		# После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
 		self.count_object = 0

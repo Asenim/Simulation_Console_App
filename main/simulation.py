@@ -1,4 +1,4 @@
-from main.maps import map_matrix
+from main import map_class
 from main import render
 from main.actions.generation_actions import generation_tree
 from main.actions.generation_actions import generation_rock
@@ -14,10 +14,10 @@ class Simulation:
 		self.width = width
 
 		# Создаём матрицу и рендер
-		self.matrix = map_matrix.MapMatrix(self.height, self.width)
+		self.matrix = map_class.Map(self.height, self.width)
 		self.renderer = render.Render(self.matrix)
 		# Отрисовываем пустую матрицу
-		self.renderer.print_map_matrix()
+		self.renderer.print_map()
 
 		# Создаём объекты генерации
 		self.gen_tree = generation_tree.GenerationTree(self.matrix)
@@ -34,7 +34,7 @@ class Simulation:
 		print()
 
 		# Отрисовываем заполненную матрицу рендер
-		self.renderer.print_map_matrix()
+		self.renderer.print_map()
 
 	def information(self):
 		"""
@@ -42,24 +42,23 @@ class Simulation:
 		количество всех объектов на матрице
 		"""
 		# Словарь с объектами матрицы
-		dict_matrix_object = {}
+		dict_map_object = {}
 
 		# Алгоритм заполнение словаря
 		for action in self.list_actions:
-			if action.object.sprite not in dict_matrix_object:
-				dict_matrix_object[action.object.sprite] = 0
+			if action.object.sprite not in dict_map_object:
+				dict_map_object[action.object.sprite] = 0
 
 		print()
-		# Подсчёт объектов на матрице для словаря
-		for i in range(self.height):
-			for j in range(self.width):
-				for key in dict_matrix_object:
-					if self.matrix.map[i][j] == key:
-						dict_matrix_object[key] = dict_matrix_object[key] + 1
+		# Подсчёт объектов на карте дял метода information
+		for key in dict_map_object:
+			for key_2 in self.matrix.map:
+				if key in self.matrix.map[key_2]:
+					dict_map_object[key] = dict_map_object[key] + 1
 
 		# Вывод количества объектов на матрице
-		for key in dict_matrix_object:
-			print(f'{key} = {dict_matrix_object[key]}')
+		for key in dict_map_object:
+			print(f'{key} = {dict_map_object[key]}')
 
 
 if __name__ == '__main__':
