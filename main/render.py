@@ -17,11 +17,10 @@ class Render:
 		for i in range(self.matrix.height):
 			for j in range(self.matrix.width):
 				coordinates = (i, j)
-				line = ''
-				if coordinates not in self.matrix.map:
-					line = line + ' '
+				if coordinates not in self.matrix.dict_object:
+					item = ' '
 				else:
-					line = line + self.matrix.map[i, j]
+					item = self.matrix.dict_object[coordinates].sprite
 
-				print(line.ljust(3), end=' ')
+				print(str(item).ljust(3), end=' ')
 			print()

@@ -13,10 +13,7 @@ class GenerationRock(generate.Generate):
 		self.object = rock.Rock()
 
 	def spawn_object(self, num_1, num_2):
-		coordinates = (num_1, num_2)
-		# Условие генерации объектов на матрице
-		if coordinates not in self.matrix.map:
-			self.matrix.map[coordinates] = rock.Rock().sprite
-
+		# Размещаем объекты в карте
+		self.matrix.add_object(rock.Rock(), num_1, num_2)
 		# После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
 		self.count_object = 0

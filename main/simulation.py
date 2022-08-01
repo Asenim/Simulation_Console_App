@@ -26,11 +26,12 @@ class Simulation:
 		self.gen_herbivore = generation_herbivore.GenerationHerbivore(self.matrix)
 		self.gen_predator = generation_predator.GenerationPredator(self.matrix)
 		# Помещаем их в список
-		self.list_actions = [self.gen_tree, self.gen_rock, self.gen_grass, self.gen_herbivore, self.gen_predator]
+		self.list_actions = [self.gen_grass, self.gen_tree, self.gen_rock, self.gen_herbivore, self.gen_predator]
 
 		# Вызываем предварительную генерацию перед началом игры
 		for i in self.list_actions:
 			i.perform()
+
 		print()
 
 		# Отрисовываем заполненную матрицу рендер
@@ -42,25 +43,25 @@ class Simulation:
 		количество всех объектов на матрице
 		"""
 		# Словарь с объектами матрицы
-		dict_map_object = {}
+		dict_objects_info = {}
 
 		# Алгоритм заполнение словаря
 		for action in self.list_actions:
-			if action.object.sprite not in dict_map_object:
-				dict_map_object[action.object.sprite] = 0
+			if action.object.sprite not in dict_objects_info:
+				dict_objects_info[action.object.sprite] = 0
 
 		print()
 		# Подсчёт объектов на карте дял метода information
-		for key in dict_map_object:
-			for key_2 in self.matrix.map:
-				if key in self.matrix.map[key_2]:
-					dict_map_object[key] = dict_map_object[key] + 1
+		for key in dict_objects_info:
+			for key_2 in self.matrix.dict_object:
+				if key in self.matrix.dict_object[key_2]:
+					dict_objects_info[key] = dict_objects_info[key] + 1
 
 		# Вывод количества объектов на матрице
-		for key in dict_map_object:
-			print(f'{key} = {dict_map_object[key]}')
+		for key in dict_objects_info:
+			print(f'{key} = {dict_objects_info[key]}')
 
 
 if __name__ == '__main__':
 	sim = Simulation(5, 5)
-	sim.information()
+	# sim.information()

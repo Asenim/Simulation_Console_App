@@ -36,9 +36,9 @@ class Generate(actions.Actions):
 			for j in range(self.matrix.width):
 				# Временный алгоритм счётчика
 				coordinates = (i, j)
-				if coordinates not in self.matrix.map:
+				if coordinates not in self.matrix.dict_object:
 					pass
-				elif self.matrix.map[i, j] == self.object.sprite:
+				elif self.matrix.dict_object[i, j].sprite == self.object.sprite:
 					self.count_object = self.count_object + 1
 
 	def random_coordinates(self):
@@ -47,9 +47,11 @@ class Generate(actions.Actions):
 		случайные координаты для наших объектов.
 		:return x, y - возвращает два числа.
 		"""
-		x = random.randint(0, self.matrix.height - 1)
-		y = random.randint(0, self.matrix.width - 1)
-		return x, y
+		while True:
+			x = random.randint(0, self.matrix.height - 1)
+			y = random.randint(0, self.matrix.width - 1)
+			if (x, y) not in self.matrix.dict_object:
+				return x, y
 
 	def spawn_object(self, num_1, num_2):
 		"""
@@ -75,22 +77,14 @@ class Generate(actions.Actions):
 		генерации координат случайного расположения
 		объектов на карте.
 		"""
+		# Подсчёт количества объектов на матрице
+		self.count_current()
 		# Основной цикл Генерации
-		while True:
-			# Подсчёт количества объектов на матрице
-			self.count_current()
-
-			# Если Количество объектов на матрице меньше чем необходимо
-			if self.count_object < self.object_quantity:
-				# Генерация случайных индексов матрицы
-				num_1, num_2 = self.random_coordinates()
-				# Алгоритм генерации самих объектов на матрице
-				self.spawn_object(num_1, num_2)
-
-			# Условие выхода из цикла
-			else:
-				self.count_object = 0
-				break
+		for i in range(self.object_quantity):
+			# Генерация случайных индексов матрицы
+			num_1, num_2 = self.random_coordinates()
+			# Алгоритм генерации самих объектов на матрице
+			self.spawn_object(num_1, num_2)
 
 	def dynamic_spawn(self):
 		"""

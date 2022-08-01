@@ -8,4 +8,9 @@ class Map:
 			print("Введите целые числа")
 
 		# Переменная в которой хранится карта (словарь)
-		self.map = {}
+		self.dict_object = {}
+
+	def add_object(self, objects, x, y):
+		coordinates = (x, y)
+		self.dict_object[coordinates] = objects
+
