@@ -5,4 +5,4 @@
 
 
 class Entity:
-	pass
+    pass

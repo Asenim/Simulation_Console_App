@@ -9,5 +9,5 @@ from main import entity
 
 
 class Grass(entity.Entity):
-	def __init__(self):
-		self.sprite = 'Gs'
+    def __init__(self):
+        self.sprite = 'Gs'
