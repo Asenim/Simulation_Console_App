@@ -32,13 +32,11 @@ class Generate(actions.Actions):
 		"""
 		Метод для подсчёта объектов на матрице
 		"""
-		for i in range(self.matrix.height):
-			for j in range(self.matrix.width):
-				# Временный алгоритм счётчика
-				coordinates = (i, j)
-				if coordinates not in self.matrix.dict_object:
+		for x in range(self.matrix.height):
+			for y in range(self.matrix.width):
+				if self.matrix.is_empty(x, y):
 					pass
-				elif self.matrix.dict_object[i, j].sprite == self.object.sprite:
+				elif self.matrix.get_object(x, y).sprite == self.object.sprite:
 					self.count_object = self.count_object + 1
 
 	def random_coordinates(self):
@@ -50,7 +48,7 @@ class Generate(actions.Actions):
 		while True:
 			x = random.randint(0, self.matrix.height - 1)
 			y = random.randint(0, self.matrix.width - 1)
-			if (x, y) not in self.matrix.dict_object:
+			if self.matrix.is_empty(x, y):
 				return x, y
 
 	def spawn_object(self, num_1, num_2):

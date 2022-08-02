@@ -14,13 +14,12 @@ class Render:
 		Отрисовка нашего словаря
 		"""
 		# Основной алгоритм отрисовки
-		for i in range(self.matrix.height):
-			for j in range(self.matrix.width):
-				coordinates = (i, j)
-				if coordinates not in self.matrix.dict_object:
+		for x in range(self.matrix.height):
+			for y in range(self.matrix.width):
+				if self.matrix.is_empty(x, y):
 					item = ' '
 				else:
-					item = self.matrix.dict_object[coordinates].sprite
+					item = self.matrix.get_object(x, y).sprite
 
 				print(str(item).ljust(3), end=' ')
 			print()

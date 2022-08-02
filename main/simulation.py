@@ -43,25 +43,28 @@ class Simulation:
 		количество всех объектов на матрице
 		"""
 		# Словарь с объектами матрицы
-		dict_objects_info = {}
+		__dict_objects_info = {}
 
 		# Алгоритм заполнение словаря
 		for action in self.list_actions:
-			if action.object.sprite not in dict_objects_info:
-				dict_objects_info[action.object.sprite] = 0
+			if action.object.sprite not in __dict_objects_info:
+				__dict_objects_info[action.object.sprite] = 0
 
 		print()
-		# Подсчёт объектов на карте дял метода information
-		for key in dict_objects_info:
-			for key_2 in self.matrix.dict_object:
-				if key in self.matrix.dict_object[key_2]:
-					dict_objects_info[key] = dict_objects_info[key] + 1
+		# Подсчёт объектов на карте для метода information
+		for x in range(self.matrix.height):
+			for y in range(self.matrix.width):
+				for key in __dict_objects_info:
+					if self.matrix.is_empty(x, y):
+						pass
+					elif key in self.matrix.get_object(x, y).sprite:
+						__dict_objects_info[key] = __dict_objects_info[key] + 1
 
 		# Вывод количества объектов на матрице
-		for key in dict_objects_info:
-			print(f'{key} = {dict_objects_info[key]}')
+		for key in __dict_objects_info:
+			print(f'{key} = {__dict_objects_info[key]}')
 
 
 if __name__ == '__main__':
 	sim = Simulation(5, 5)
-	# sim.information()
+	sim.information()

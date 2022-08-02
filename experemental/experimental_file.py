@@ -16,10 +16,10 @@ generate_gross_2 = random.randint(0, 2)
 for i in range(3):
 	for j in range(4):
 		# Если в клетке нет объекта - создаем его
-		if matrix.dict_object[i][j] == 0:
-			matrix.dict_object[generate_gross][generate_gross] = T.sprite
-		if matrix.dict_object[i][j] == 0:
-			matrix.dict_object[generate_gross_2][generate_gross_2] = T.sprite
+		if matrix.__dict_object[i][j] == 0:
+			matrix.__dict_object[generate_gross][generate_gross] = T.sprite
+		if matrix.__dict_object[i][j] == 0:
+			matrix.__dict_object[generate_gross_2][generate_gross_2] = T.sprite
 
 
 class Exsperimental:

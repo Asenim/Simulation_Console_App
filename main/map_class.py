@@ -8,9 +8,32 @@ class Map:
 			print("Введите целые числа")
 
 		# Переменная в которой хранится карта (словарь)
-		self.dict_object = {}
+		self.__dict_object = {}
 
 	def add_object(self, objects, x, y):
+		"""
+		Метод позволяющий добавлять
+		данные в словарь.
+		"""
 		coordinates = (x, y)
-		self.dict_object[coordinates] = objects
+		self.__dict_object[coordinates] = objects
 
+	def get_object(self, x, y):
+		"""
+		Метод позволяющий доставать
+		значения из словаря.
+		"""
+		coordinates = (x, y)
+		if coordinates in self.__dict_object:
+			return self.__dict_object[coordinates]
+
+	def is_empty(self, x, y):
+		"""
+		Метод для проверки наличия
+		координат в словаре.
+		"""
+		coordinates = (x, y)
+		if coordinates not in self.__dict_object:
+			return True
+		else:
+			return False
