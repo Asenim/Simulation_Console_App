@@ -1,5 +1,5 @@
 from main.actions import generate
-from main.static_objects import rock
+from main.entity_object.static_objects import rock
 
 
 class GenerationRock(generate.Generate):
@@ -10,10 +10,10 @@ class GenerationRock(generate.Generate):
         # Счётчик камня
         self.count_object = 0
         # Объект для подсчёта в information и generate
-        self.object = rock.Rock()
+        self.object = rock.Rock(self.matrix.height, self.matrix.width)
 
     def spawn_object(self, num_1, num_2):
         # Размещаем объекты в карте
-        self.matrix.add_object(rock.Rock(), num_1, num_2)
+        self.matrix.add_object(rock.Rock(self.matrix.height, self.matrix.width), num_1, num_2)
         # После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
         self.count_object = 0

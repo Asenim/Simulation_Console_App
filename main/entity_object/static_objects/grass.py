@@ -5,9 +5,10 @@
 Заполняет нашу матрицу своими объектами
 """
 
-from main import entity
+from main.entity_object import entity
 
 
 class Grass(entity.Entity):
-    def __init__(self):
+    def __init__(self, x, y):
+        super().__init__(x, y)
         self.sprite = 'Gs'

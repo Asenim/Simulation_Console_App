@@ -6,13 +6,13 @@
     range_attack - расстояние атаки
 """
 
-from main.animals import creatures
+from main.entity_object.animals import creatures
 
 
 class Preadator(creatures.Creatures):
     def __init__(self, speed, hit_point, max_hit_point, gender,
-                 successful_hunting, restore_hp_successful_hunt, range_attack):
-        super().__init__(speed, hit_point, max_hit_point, gender)
+                 successful_hunting, restore_hp_successful_hunt, range_attack, x, y):
+        super().__init__(speed, hit_point, max_hit_point, gender, x, y)
         self.successful_hunting = successful_hunting
         self.restore_hp_successful_hunt = restore_hp_successful_hunt
         self.range_attack = range_attack

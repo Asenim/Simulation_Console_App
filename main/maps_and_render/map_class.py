@@ -37,3 +37,8 @@ class Map:
             return True
         else:
             return False
+
+    def map_size(self):
+        x = self.height
+        y = self.width
+        return x, y

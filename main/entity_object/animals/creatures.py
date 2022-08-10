@@ -18,12 +18,12 @@
 
 """
 
-
-from main import entity
+from main.entity_object import entity
 
 
 class Creatures(entity.Entity):
-    def __init__(self, speed, hit_point, max_hit_point, gender):
+    def __init__(self, speed, hit_point, max_hit_point, gender, x, y):
+        super().__init__(x, y)
         self.speed = speed
         self.hit_point = hit_point
         self.max_hit_point = max_hit_point

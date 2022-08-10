@@ -1,5 +1,4 @@
-from main import map_class
-from main import render
+from main.maps_and_render import map_class, render
 from main.actions.generation_actions import generation_tree
 from main.actions.generation_actions import generation_rock
 from main.actions.generation_actions import generation_grass

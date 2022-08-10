@@ -1,5 +1,5 @@
 from main.actions import generate
-from main.animals.dynamic_object import predator
+from main.entity_object.animals.dynamic_object import predator
 import random
 
 
@@ -14,7 +14,8 @@ class GenerationPredator(generate.Generate):
         self.object = predator.Preadator(speed=random.randint(2, 4), hit_point=5, max_hit_point=5,
                                          gender=random.choice(['male', 'female']),
                                          successful_hunting=3, restore_hp_successful_hunt=random.randint(1, 2),
-                                         range_attack=random.randint(1, 2))
+                                         range_attack=random.randint(1, 2),
+                                         x=self.matrix.height, y=self.matrix.width)
 
     def spawn_object(self, num_1, num_2):
         # Размещаем объекты в карте
@@ -23,7 +24,8 @@ class GenerationPredator(generate.Generate):
                                                   gender=random.choice(['male', 'female']),
                                                   successful_hunting=3,
                                                   restore_hp_successful_hunt=random.randint(1, 2),
-                                                  range_attack=random.randint(1, 2)),
+                                                  range_attack=random.randint(1, 2),
+                                                  x=self.matrix.height, y=self.matrix.width),
                                num_1, num_2)
         # После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
         self.count_object = 0

@@ -4,14 +4,13 @@
     restore_hp_eat_grass - Количество восстанавливаемого хп при
     поедании травы.
 """
-
-from main.animals import creatures
+from main.entity_object.animals import creatures
 
 
 class Herbivore(creatures.Creatures):
     def __init__(self, speed, hit_point, max_hit_point,
-                 gender, restore_hp_eat_grass):
-        super().__init__(speed, hit_point, max_hit_point, gender)
+                 gender, restore_hp_eat_grass, x, y):
+        super().__init__(speed, hit_point, max_hit_point, gender, x, y)
         self.restore_hp_eat_grass = restore_hp_eat_grass
         self.sprite = 'Hrb'
 

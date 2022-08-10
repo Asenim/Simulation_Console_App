@@ -28,7 +28,7 @@
     - dynamic object
 """
 from main.actions import generate
-from main.animals.dynamic_object import herbivore
+from main.entity_object.animals.dynamic_object import herbivore
 import random
 
 
@@ -42,13 +42,15 @@ class GenerationHerbivore(generate.Generate):
         # Объект для корректной работы словаря в information и цикла в generate
         self.object = herbivore.Herbivore(speed=2, hit_point=10, max_hit_point=10,
                                           gender=random.choice(['male', 'female']),
-                                          restore_hp_eat_grass=random.randint(1, 3))
+                                          restore_hp_eat_grass=random.randint(1, 3),
+                                          x=self.matrix.height, y=self.matrix.width)
 
     def spawn_object(self, num_1, num_2):
         # Размещаем объекты в карте
         self.matrix.add_object(herbivore.Herbivore(speed=2, hit_point=10, max_hit_point=10,
                                                    gender=random.choice(['male', 'female']),
-                                                   restore_hp_eat_grass=random.randint(1, 3)),
+                                                   restore_hp_eat_grass=random.randint(1, 3),
+                                                   x=self.matrix.height, y=self.matrix.width),
                                num_1, num_2)
         # После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
         self.count_object = 0

@@ -1,5 +1,4 @@
-from main.static_objects import grass
-from main import map_class
+from main.entity_object.static_objects import grass
 import random
 
 # Создаём траву
