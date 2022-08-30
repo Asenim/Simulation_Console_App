@@ -4,6 +4,7 @@ from main.actions.generation_actions import generation_rock
 from main.actions.generation_actions import generation_grass
 from main.actions.generation_actions import generation_herbivore
 from main.actions.generation_actions import generation_predator
+from main import actions_iteraible
 
 
 class Simulation:
@@ -25,15 +26,20 @@ class Simulation:
         self.gen_herbivore = generation_herbivore.GenerationHerbivore(self.matrix)
         self.gen_predator = generation_predator.GenerationPredator(self.matrix)
         # Помещаем их в список
-        self.list_actions = [self.gen_grass, self.gen_tree, self.gen_rock, self.gen_herbivore, self.gen_predator]
+        self.list_actions = [self.gen_grass, self.gen_tree, self.gen_rock, self.gen_herbivore]  # self.gen_predator]
 
         # Вызываем предварительную генерацию перед началом игры
         for i in self.list_actions:
             i.perform()
 
-        print()
+        # Создаём объект класса actions и объект класса поиска пути
+        self.actions_iterables = actions_iteraible.ActionsIterable(self.matrix)
 
         # Отрисовываем заполненную матрицу рендер
+        print()
+        self.renderer.print_map()
+        print("--------------------")
+        self.actions_iterables.path_find.start_point()
         self.renderer.print_map()
 
     def information(self):

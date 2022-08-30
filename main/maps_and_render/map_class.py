@@ -38,6 +38,10 @@ class Map:
         else:
             return False
 
+    def delete_objects(self, x, y):
+        coordinates = (x, y)
+        del self.__dict_object[coordinates]
+
     def map_size(self):
         x = self.height
         y = self.width

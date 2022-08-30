@@ -17,7 +17,7 @@ class Herbivore(creatures.Creatures):
     def make_move(self):
         pass
 
-    def eat_gross(self):
+    def eat_grass(self):
         pass
 
     def reproduction(self):
