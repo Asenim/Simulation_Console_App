@@ -26,7 +26,7 @@ class Simulation:
         self.gen_herbivore = generation_herbivore.GenerationHerbivore(self.matrix)
         self.gen_predator = generation_predator.GenerationPredator(self.matrix)
         # Помещаем их в список
-        self.list_actions = [self.gen_grass, self.gen_tree, self.gen_rock, self.gen_herbivore]  # self.gen_predator]
+        self.list_actions = [self.gen_grass, self.gen_tree, self.gen_rock, self.gen_herbivore, self.gen_predator]
 
         # Вызываем предварительную генерацию перед началом игры
         for i in self.list_actions:
@@ -39,7 +39,7 @@ class Simulation:
         print()
         self.renderer.print_map()
         print("--------------------")
-        self.actions_iterables.path_find.start_point()
+        self.actions_iterables.perform()
         self.renderer.print_map()
 
     def information(self):

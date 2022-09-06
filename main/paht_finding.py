@@ -21,9 +21,6 @@ class PathFinder:
         self.start_point_save = None
         self.end_point_save = None
 
-        # Временная переменная которая будет показывать путь
-        self.count = 0
-
         # Запуск всех методов
         self.start_point()
         self.print_collections()
@@ -35,10 +32,13 @@ class PathFinder:
         for i in range(self.matrix.height):
             for j in range(self.matrix.width):
                 if not self.matrix.is_empty(i, j):
-                    herb = self.matrix.get_object(i, j)
-                    if herb.sprite == 'Hrb':
-                        self.queues.appendleft(((i, j), (i, j)))
-                        self.start_point_save = (i, j)
+                    creatures = self.matrix.get_object(i, j)
+                    if creatures.sprite == 'Hrb':
+                        self.hunter = creatures
+                        self.victim = 'Gs'
+                        coordinated = Coordinates(((i, j), (i, j)))
+                        self.queues.appendleft(coordinated)
+                        self.start_point_save = coordinated.coordinates[0]
                         # Далее будет вызываться метод path_finder
                         # Который очистит очередь для дальнейшего использования
                         self.path_finder()
@@ -48,6 +48,42 @@ class PathFinder:
                         self.queues.clear()
                         self.sets.clear()
 
+                    # Движение хищника
+                    # if creatures.sprite == 'Prd':
+                    #     self.hunter = creatures
+                    #     self.victim = 'Hrb'
+                    #     self.queues.appendleft(((i, j), (i, j)))
+                    #     self.start_point_save = (i, j)
+                    #     # Далее будет вызываться метод path_finder
+                    #     # Который очистит очередь для дальнейшего использования
+                    #     self.path_finder()
+                    #     self.overcome_path()
+                    #     self.moving_object()
+                    #     # После использования всех коллекций очищаем их для корректной работы следующего объекта
+                    #     self.queues.clear()
+                    #     self.sets.clear()
+
+    def filling_queue(self, coordinates, crd_1, crd_2):
+        """
+        Метод позволяющий заполнять корректно очередь
+        для поиска пути.
+        :param coordinates: принимаем координаты стартовой точки.
+        :param crd_1: принимаем сдвиг по первой координате.
+        :param crd_2: принимаем сдвиг по второй координате.
+        """
+        # Условие корректного заполнения очереди
+        if (0 <= coordinates.x + crd_1 < self.matrix.height) and (0 <= coordinates.y + crd_2 < self.matrix.width):
+            # Проверяем не находятся ли объекты по этим координатам
+            if self.matrix.is_empty(coordinates.x + crd_1, coordinates.y + crd_2):
+                coordinated = Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
+                                           (coordinates.x, coordinates.y)))
+                self.queues.append(coordinated)
+            # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
+            elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.victim:
+                coordinated = Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
+                                           (coordinates.x, coordinates.y)))
+                self.queues.append(coordinated)
+
     def path_finder(self):
         """
         Алгоритм поиска пути в ширину.
@@ -55,50 +91,28 @@ class PathFinder:
         # Работает пока очередь не пуста или не выполнено условие остановки
         while len(self.queues) != 0:
             # Забираем координаты стартовой точки
-            coordinates = self.queues[0][0]
+            coordinates = self.queues[0]
 
-            # Условие корректного заполнения очереди
-            if (0 <= coordinates[0]+1 < self.matrix.height) and (0 <= coordinates[1] < self.matrix.width):
-                # Проверяем не находятся ли объекты по этим координатам
-                if self.matrix.is_empty(coordinates[0]+1, coordinates[1]):
-                    self.queues.append(((coordinates[0]+1, coordinates[1]), (coordinates[0], coordinates[1])))
-                # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
-                elif self.matrix.get_object(coordinates[0]+1, coordinates[1]).sprite == 'Gs':
-                    self.queues.append(((coordinates[0]+1, coordinates[1]), (coordinates[0], coordinates[1])))
-
-            if (0 <= coordinates[0]-1 < self.matrix.height) and (0 <= coordinates[1] < self.matrix.width):
-                if self.matrix.is_empty(coordinates[0]-1, coordinates[1]):
-                    self.queues.append(((coordinates[0]-1, coordinates[1]), (coordinates[0], coordinates[1])))
-                elif self.matrix.get_object(coordinates[0]-1, coordinates[1]).sprite == 'Gs':
-                    self.queues.append(((coordinates[0]-1, coordinates[1]), (coordinates[0], coordinates[1])))
-
-            if (0 <= coordinates[0] < self.matrix.height) and (0 <= coordinates[1]+1 < self.matrix.width):
-                if self.matrix.is_empty(coordinates[0], coordinates[1]+1):
-                    self.queues.append(((coordinates[0], coordinates[1]+1), (coordinates[0], coordinates[1])))
-                elif self.matrix.get_object(coordinates[0], coordinates[1]+1).sprite == 'Gs':
-                    self.queues.append(((coordinates[0], coordinates[1]+1), (coordinates[0], coordinates[1])))
-
-            if (0 <= coordinates[0] < self.matrix.height) and (0 <= coordinates[1]-1 < self.matrix.width):
-                if self.matrix.is_empty(coordinates[0], coordinates[1]-1):
-                    self.queues.append(((coordinates[0], coordinates[1]-1), (coordinates[0], coordinates[1])))
-                elif self.matrix.get_object(coordinates[0], coordinates[1]-1).sprite == 'Gs':
-                    self.queues.append(((coordinates[0], coordinates[1]-1), (coordinates[0], coordinates[1])))
+            self.filling_queue(coordinates, +1, 0)
+            self.filling_queue(coordinates, -1, 0)
+            self.filling_queue(coordinates, 0, +1)
+            self.filling_queue(coordinates, 0, -1)
 
             # Извлекаем из очереди первый элемент
             result = self.queues.popleft()
             # Алгоритм для корректного добавления координат в множество
             flag = True
             for element in self.sets:
-                if result[0] == element[1]:
+                if result.coordinates[0] == element.coordinates[1]:
                     flag = False
-            # Если флаг истинный
+            # Если флаг истинный добавляем в множество наш кортеж
             if flag:
                 self.sets.update((result,))
 
             # Останавливаем алгоритм если находим необходимый объект
-            if not self.matrix.is_empty(coordinates[0], coordinates[1]):
-                if self.matrix.get_object(coordinates[0], coordinates[1]).sprite == 'Gs':
-                    self.end_point_save = result[0]
+            if not self.matrix.is_empty(coordinates.x, coordinates.y):
+                if self.matrix.get_object(coordinates.x, coordinates.y).sprite == self.victim:
+                    self.end_point_save = result.coordinates[0]
                     self.queues.clear()
                     break
 
@@ -111,8 +125,8 @@ class PathFinder:
         while True:
             # Перебираем наше множество
             for elements in self.sets:
-                if (self.queues[0] == elements[0]) and (elements[1] not in self.queues):
-                    self.queues.appendleft(elements[1])
+                if (self.queues[0] == elements.coordinates[0]) and (elements.coordinates[1] not in self.queues):
+                    self.queues.appendleft(elements.coordinates[1])
 
             if self.start_point_save == self.queues[0]:
                 break
@@ -137,6 +151,7 @@ class PathFinder:
         """
         if len(self.queues) > 2:
             objects = self.matrix.get_object(self.start_point_save[0], self.start_point_save[1])
+            # Параметр range будет принимать параметр скорости существ
             for element in range(2):
                 coordinates = self.queues[element]
                 if (coordinates != self.queues[0]) and (coordinates != self.queues[-1]):
@@ -156,3 +171,10 @@ class PathFinder:
         print('points')
         print(f'start_point_save = {self.start_point_save} \n'
               f'end_point_save = {self.end_point_save}')
+
+
+class Coordinates:
+    def __init__(self, coordinates):
+        self.coordinates = coordinates
+        self.x = self.coordinates[0][0]
+        self.y = self.coordinates[0][1]
