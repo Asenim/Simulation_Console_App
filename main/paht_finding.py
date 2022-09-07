@@ -38,7 +38,7 @@ class PathFinder:
                         self.victim = 'Gs'
                         coordinated = Coordinates(((i, j), (i, j)))
                         self.queues.appendleft(coordinated)
-                        self.start_point_save = coordinated.coordinates[0]
+                        self.start_point_save = coordinated.coordinate_1
                         # Далее будет вызываться метод path_finder
                         # Который очистит очередь для дальнейшего использования
                         self.path_finder()
@@ -47,21 +47,6 @@ class PathFinder:
                         # После использования всех коллекций очищаем их для корректной работы следующего объекта
                         self.queues.clear()
                         self.sets.clear()
-
-                    # Движение хищника
-                    # if creatures.sprite == 'Prd':
-                    #     self.hunter = creatures
-                    #     self.victim = 'Hrb'
-                    #     self.queues.appendleft(((i, j), (i, j)))
-                    #     self.start_point_save = (i, j)
-                    #     # Далее будет вызываться метод path_finder
-                    #     # Который очистит очередь для дальнейшего использования
-                    #     self.path_finder()
-                    #     self.overcome_path()
-                    #     self.moving_object()
-                    #     # После использования всех коллекций очищаем их для корректной работы следующего объекта
-                    #     self.queues.clear()
-                    #     self.sets.clear()
 
     def filling_queue(self, coordinates, crd_1, crd_2):
         """
@@ -103,8 +88,10 @@ class PathFinder:
             # Алгоритм для корректного добавления координат в множество
             flag = True
             for element in self.sets:
-                if result.coordinates[0] == element.coordinates[1]:
+                if result.coordinate_1 == element.coordinate_2:
                     flag = False
+                else:
+                    flag = True
             # Если флаг истинный добавляем в множество наш кортеж
             if flag:
                 self.sets.update((result,))
@@ -112,7 +99,7 @@ class PathFinder:
             # Останавливаем алгоритм если находим необходимый объект
             if not self.matrix.is_empty(coordinates.x, coordinates.y):
                 if self.matrix.get_object(coordinates.x, coordinates.y).sprite == self.victim:
-                    self.end_point_save = result.coordinates[0]
+                    self.end_point_save = result.coordinate_1
                     self.queues.clear()
                     break
 
@@ -125,11 +112,12 @@ class PathFinder:
         while True:
             # Перебираем наше множество
             for elements in self.sets:
-                if (self.queues[0] == elements.coordinates[0]) and (elements.coordinates[1] not in self.queues):
-                    self.queues.appendleft(elements.coordinates[1])
+                if (self.queues[0] == elements.coordinate_1) and (elements.coordinate_2 not in self.queues):
+                    self.queues.appendleft(elements.coordinate_2)
 
             if self.start_point_save == self.queues[0]:
                 break
+            print()
 
     def moving_object(self):
         """
@@ -175,6 +163,14 @@ class PathFinder:
 
 class Coordinates:
     def __init__(self, coordinates):
+        """
+        Класс принимающий в себя координаты и распаривающий их.
+        """
+        # Хранит в себе кортеж с двумя кортежами внутри которых лежат координаты
         self.coordinates = coordinates
+        # crd_1 и crd_2 - хранят в себе первый и второй кортежи координат
+        self.coordinate_1 = self.coordinates[0]
+        self.coordinate_2 = self.coordinates[1]
+        # х и у - хранят в себе элементы первого кортежа
         self.x = self.coordinates[0][0]
         self.y = self.coordinates[0][1]
