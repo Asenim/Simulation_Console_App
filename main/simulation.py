@@ -32,12 +32,13 @@ class Simulation:
         for i in self.list_actions:
             i.perform()
 
-        # Создаём объект класса actions и объект класса поиска пути
-        self.actions_iterables = actions_iteraible.ActionsIterable(self.matrix)
-
         # Отрисовываем заполненную матрицу рендер
         print()
         self.renderer.print_map()
+
+        # Создаём объект класса actions и объект класса поиска пути
+        self.actions_iterables = actions_iteraible.ActionsIterable(self.matrix)
+
         print("--------------------")
         self.actions_iterables.perform()
         self.renderer.print_map()
@@ -71,5 +72,5 @@ class Simulation:
 
 
 if __name__ == '__main__':
-    sim = Simulation(5, 5)
+    sim = Simulation(10, 10)
     sim.information()

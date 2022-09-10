@@ -74,7 +74,7 @@ class PathFinder:
         Алгоритм поиска пути в ширину.
         """
         # Работает пока очередь не пуста или не выполнено условие остановки
-        while len(self.queues) != 0:
+        while len(self.queues) < 1:
             # Забираем координаты стартовой точки
             coordinates = self.queues[0]
 
@@ -90,8 +90,8 @@ class PathFinder:
             for element in self.sets:
                 if result.coordinate_1 == element.coordinate_2:
                     flag = False
-                else:
-                    flag = True
+                    break
+
             # Если флаг истинный добавляем в множество наш кортеж
             if flag:
                 self.sets.update((result,))
@@ -109,7 +109,7 @@ class PathFinder:
         """
         self.queues.append(self.end_point_save)
 
-        while True:
+        while len(self.queues) < 1:
             # Перебираем наше множество
             for elements in self.sets:
                 if (self.queues[0] == elements.coordinate_1) and (elements.coordinate_2 not in self.queues):
@@ -117,7 +117,6 @@ class PathFinder:
 
             if self.start_point_save == self.queues[0]:
                 break
-            print()
 
     def moving_object(self):
         """
