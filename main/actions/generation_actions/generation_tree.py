@@ -6,7 +6,7 @@ class GenerationTree(generate.Generate):
     def __init__(self, matrix):
         super().__init__(matrix)
         # Необходимое количество дерева на карте в зависимости от размера матрицы
-        self.object_quantity = int(self.matrix_cells * 0.1)
+        self.object_quantity = int(self.matrix_cells * 0.04)
         # Счетчик дерева
         self.count_object = 0
         # Объект для подсчёта в information и generate

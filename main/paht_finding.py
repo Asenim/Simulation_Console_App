@@ -9,6 +9,9 @@ class PathFinder:
         :param hunter: класс, который будет охотиться.
         :param victim: класс, на который будут - охотится.
         :param matrix: объект класса карты с которым будем работать
+
+        P.S. Все методы где описана "Опция" - являются расширяемыми и
+        дополняемыми после обсуждения и одобрения.
         """
         self.hunter = hunter
         self.victim = victim
@@ -25,6 +28,39 @@ class PathFinder:
         self.start_point()
         self.print_collections()
 
+    def check_objects(self, hunters, x, y):
+        """
+        Метод для проверки кто у нас охотник
+        и корректной работе алгоритма.
+        P.S. Опция - Инкапсуляция.
+        :param hunters: в зависимости от этого параметра
+         будет определяться жертва.
+        :param x: параметр отвечает за координаты и
+         корректную работу с ними.
+        :param y: то же самое что и x.
+        """
+        if hunters.sprite == 'Hrb':
+            self.hunter = hunters
+            self.victim = 'Gs'
+        elif hunters.sprite == 'Prd':
+            self.hunter = hunters
+            self.victim = 'Hrb'
+
+        if self.hunter is not None:
+            coordinated = Coordinates(((x, y), (x, y)))
+            self.queues.appendleft(coordinated)
+            self.start_point_save = coordinated.coordinate_1
+            # Далее будет вызываться метод path_finder
+            # Который очистит очередь для дальнейшего использования
+            self.path_finder()
+            self.overcome_path()
+            self.moving_object()
+            # После использования всех коллекций очищаем их для корректной работы следующего объекта
+            self.queues.clear()
+            self.sets.clear()
+            self.start_point_save = None
+            self.end_point_save = None
+
     def start_point(self):
         """
         Функция для добавления стартовой позиции
@@ -33,27 +69,13 @@ class PathFinder:
             for j in range(self.matrix.width):
                 if not self.matrix.is_empty(i, j):
                     creatures = self.matrix.get_object(i, j)
-                    if creatures.sprite == 'Hrb':
-                        self.hunter = creatures
-                        self.victim = 'Gs'
-                        coordinated = Coordinates(((i, j), (i, j)))
-                        self.queues.appendleft(coordinated)
-                        self.start_point_save = coordinated.coordinate_1
-                        # Далее будет вызываться метод path_finder
-                        # Который очистит очередь для дальнейшего использования
-                        self.path_finder()
-                        self.overcome_path()
-                        self.moving_object()
-                        # После использования всех коллекций очищаем их для корректной работы следующего объекта
-                        self.queues.clear()
-                        self.sets.clear()
-                        self.start_point_save = None
-                        self.end_point_save = None
+                    self.check_objects(creatures, i, j)
 
     def filling_queue(self, coordinates, crd_1, crd_2):
         """
         Метод позволяющий заполнять корректно очередь
         для поиска пути.
+        P.S. Опция - Инкапсуляция.
         :param coordinates: принимаем координаты стартовой точки.
         :param crd_1: принимаем сдвиг по первой координате.
         :param crd_2: принимаем сдвиг по второй координате.
@@ -82,6 +104,7 @@ class PathFinder:
     def path_finder(self):
         """
         Алгоритм поиска пути в ширину.
+        PS. Опция - Инкапсуляция
         """
         # Работает пока очередь не пуста или не выполнено условие остановки
         while True:
@@ -120,6 +143,7 @@ class PathFinder:
     def overcome_path(self):
         """
         Возвращаем путь
+        P.S. Опция - Инкапсуляция.
         """
         if self.end_point_save is not None:
             self.queues.append(self.end_point_save)
@@ -136,7 +160,8 @@ class PathFinder:
     def moving_object(self):
         """
         Метод двигающий объект к цели.
-        Первое время он показываем путь, который проходит объект
+        Первое время он показываем путь, который проходит объект.
+        P.S. Опция - инкапсуляция.
         """
         # Двигаем объект к цели
         """
