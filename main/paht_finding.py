@@ -13,7 +13,7 @@ class PathFinder:
         self.hunter = hunter
         self.victim = victim
         self.matrix = matrix
-        # Инициализируем очередь и множество
+        # Инициализируем очередь, множество и коллекцию для посещенных объектов
         self.queues = deque()
         self.sets = set()
 
@@ -47,6 +47,8 @@ class PathFinder:
                         # После использования всех коллекций очищаем их для корректной работы следующего объекта
                         self.queues.clear()
                         self.sets.clear()
+                        self.start_point_save = None
+                        self.end_point_save = None
 
     def filling_queue(self, coordinates, crd_1, crd_2):
         """
@@ -58,11 +60,19 @@ class PathFinder:
         """
         # Условие корректного заполнения очереди
         if (0 <= coordinates.x + crd_1 < self.matrix.height) and (0 <= coordinates.y + crd_2 < self.matrix.width):
+
             # Проверяем не находятся ли объекты по этим координатам
             if self.matrix.is_empty(coordinates.x + crd_1, coordinates.y + crd_2):
                 coordinated = Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
                                            (coordinates.x, coordinates.y)))
-                self.queues.append(coordinated)
+                # Проверка: не обработаны ли эти координаты ранее
+                flag = True
+                for element in self.sets:
+                    if coordinated.coordinates == element.coordinates:
+                        flag = False
+                        break
+                if flag:
+                    self.queues.append(coordinated)
             # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
             elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.victim:
                 coordinated = Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
@@ -74,42 +84,47 @@ class PathFinder:
         Алгоритм поиска пути в ширину.
         """
         # Работает пока очередь не пуста или не выполнено условие остановки
-        while len(self.queues) < 1:
+        while True:
             # Забираем координаты стартовой точки
-            coordinates = self.queues[0]
+            if len(self.queues) > 0:
+                coordinates = self.queues.popleft()
 
-            self.filling_queue(coordinates, +1, 0)
-            self.filling_queue(coordinates, -1, 0)
-            self.filling_queue(coordinates, 0, +1)
-            self.filling_queue(coordinates, 0, -1)
+                # Заполняем очередь
+                self.filling_queue(coordinates, +1, 0)
+                self.filling_queue(coordinates, -1, 0)
+                self.filling_queue(coordinates, 0, +1)
+                self.filling_queue(coordinates, 0, -1)
 
-            # Извлекаем из очереди первый элемент
-            result = self.queues.popleft()
-            # Алгоритм для корректного добавления координат в множество
-            flag = True
-            for element in self.sets:
-                if result.coordinate_1 == element.coordinate_2:
-                    flag = False
-                    break
+                # self.vizit.update((coordinates,))
 
-            # Если флаг истинный добавляем в множество наш кортеж
-            if flag:
-                self.sets.update((result,))
+                # Алгоритм для корректного добавления координат в множество
+                flag = True
+                for element in self.sets:
+                    if coordinates.coordinate_1 == element.coordinate_2:
+                        flag = False
+                        break
+#
+                # Если флаг истинный добавляем в множество наш кортеж
+                if flag:
+                    self.sets.update((coordinates,))
 
-            # Останавливаем алгоритм если находим необходимый объект
-            if not self.matrix.is_empty(coordinates.x, coordinates.y):
-                if self.matrix.get_object(coordinates.x, coordinates.y).sprite == self.victim:
-                    self.end_point_save = result.coordinate_1
-                    self.queues.clear()
-                    break
+                # Останавливаем алгоритм если находим необходимый объект
+                if not self.matrix.is_empty(coordinates.x, coordinates.y):
+                    if self.matrix.get_object(coordinates.x, coordinates.y).sprite == self.victim:
+                        self.end_point_save = coordinates.coordinate_1
+                        self.queues.clear()
+                        break
+            elif len(self.queues) == 0:
+                break
 
     def overcome_path(self):
         """
         Возвращаем путь
         """
-        self.queues.append(self.end_point_save)
+        if self.end_point_save is not None:
+            self.queues.append(self.end_point_save)
 
-        while len(self.queues) < 1:
+        while len(self.queues) > 0:
             # Перебираем наше множество
             for elements in self.sets:
                 if (self.queues[0] == elements.coordinate_1) and (elements.coordinate_2 not in self.queues):

@@ -6,7 +6,7 @@ class GenerationGrass(generate.Generate):
     def __init__(self, matrix):
         super().__init__(matrix)
         # Необходимое количество травы на карте в зависимости от размера матрицы
-        self.object_quantity = int(self.matrix_cells * 0.01)
+        self.object_quantity = int(self.matrix_cells * 0.2)
         # Счётчик травы
         self.count_object = 0
         # Объект для подсчета в information и generate
