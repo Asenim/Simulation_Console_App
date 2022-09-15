@@ -33,15 +33,17 @@ class Simulation:
             i.perform()
 
         # Отрисовываем заполненную матрицу рендер
-        print()
+        print('---------------------')
         self.renderer.print_map()
+        print('----------------------')
 
         # Создаём объект класса actions и объект класса поиска пути
         self.actions_iterables = actions_iteraible.ActionsIterable(self.matrix)
 
-        print("--------------------")
+        print("=====================")
         self.actions_iterables.perform()
         self.renderer.print_map()
+        print('====================')
 
     def information(self):
         """

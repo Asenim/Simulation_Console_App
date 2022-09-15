@@ -1,4 +1,5 @@
 from collections import deque
+from main import coordinate
 
 
 class PathFinder:
@@ -26,7 +27,7 @@ class PathFinder:
 
         # Запуск всех методов
         self.start_point()
-        self.print_collections()
+        # self.print_collections()
 
     def check_objects(self, hunters, x, y):
         """
@@ -47,9 +48,9 @@ class PathFinder:
             self.victim = 'Hrb'
 
         if self.hunter is not None:
-            coordinated = Coordinates(((x, y), (x, y)))
+            coordinated = coordinate.Coordinates(((x, y), (x, y)))
             self.queues.appendleft(coordinated)
-            self.start_point_save = coordinated.coordinate_1
+            self.start_point_save = coordinated.coordinates[0]
             # Далее будет вызываться метод path_finder
             # Который очистит очередь для дальнейшего использования
             self.path_finder()
@@ -60,6 +61,8 @@ class PathFinder:
             self.sets.clear()
             self.start_point_save = None
             self.end_point_save = None
+            self.hunter = None
+            self.victim = None
 
     def start_point(self):
         """
@@ -85,20 +88,21 @@ class PathFinder:
 
             # Проверяем не находятся ли объекты по этим координатам
             if self.matrix.is_empty(coordinates.x + crd_1, coordinates.y + crd_2):
-                coordinated = Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
-                                           (coordinates.x, coordinates.y)))
+                coordinated = coordinate.Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
+                                                      (coordinates.x, coordinates.y)))
                 # Проверка: не обработаны ли эти координаты ранее
                 flag = True
                 for element in self.sets:
                     if coordinated.coordinates == element.coordinates:
                         flag = False
                         break
+
                 if flag:
                     self.queues.append(coordinated)
             # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
             elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.victim:
-                coordinated = Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
-                                           (coordinates.x, coordinates.y)))
+                coordinated = coordinate.Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
+                                                      (coordinates.x, coordinates.y)))
                 self.queues.append(coordinated)
 
     def path_finder(self):
@@ -118,15 +122,13 @@ class PathFinder:
                 self.filling_queue(coordinates, 0, +1)
                 self.filling_queue(coordinates, 0, -1)
 
-                # self.vizit.update((coordinates,))
-
                 # Алгоритм для корректного добавления координат в множество
                 flag = True
                 for element in self.sets:
-                    if coordinates.coordinate_1 == element.coordinate_2:
+                    if coordinates.coordinates[0] == element.coordinates[1]:
                         flag = False
                         break
-#
+
                 # Если флаг истинный добавляем в множество наш кортеж
                 if flag:
                     self.sets.update((coordinates,))
@@ -134,7 +136,7 @@ class PathFinder:
                 # Останавливаем алгоритм если находим необходимый объект
                 if not self.matrix.is_empty(coordinates.x, coordinates.y):
                     if self.matrix.get_object(coordinates.x, coordinates.y).sprite == self.victim:
-                        self.end_point_save = coordinates.coordinate_1
+                        self.end_point_save = coordinates.coordinates[0]
                         self.queues.clear()
                         break
             elif len(self.queues) == 0:
@@ -143,7 +145,7 @@ class PathFinder:
     def overcome_path(self):
         """
         Возвращаем путь
-        P.S. Опция - Инкапсуляция.
+        P.S. Переписать в более классический способ
         """
         if self.end_point_save is not None:
             self.queues.append(self.end_point_save)
@@ -151,8 +153,8 @@ class PathFinder:
         while len(self.queues) > 0:
             # Перебираем наше множество
             for elements in self.sets:
-                if (self.queues[0] == elements.coordinate_1) and (elements.coordinate_2 not in self.queues):
-                    self.queues.appendleft(elements.coordinate_2)
+                if (self.queues[0] == elements.coordinates[0]) and (elements.coordinates[1] not in self.queues):
+                    self.queues.appendleft(elements.coordinates[1])
 
             if self.start_point_save == self.queues[0]:
                 break
@@ -161,7 +163,7 @@ class PathFinder:
         """
         Метод двигающий объект к цели.
         Первое время он показываем путь, который проходит объект.
-        P.S. Опция - инкапсуляция.
+        P.S. Вынести в методы существ
         """
         # Двигаем объект к цели
         """
@@ -186,30 +188,33 @@ class PathFinder:
                     coordinates_del = self.queues[element-1]
                     self.matrix.delete_objects(coordinates_del[0], coordinates_del[1])
 
-    def print_collections(self):
-        """
-        Временный.
-        Вывод всех коллекций на экран.
-        """
-        print('queue')
-        print(self.queues)
-        print('set')
-        print(self.sets)
-        print('points')
-        print(f'start_point_save = {self.start_point_save} \n'
-              f'end_point_save = {self.end_point_save}')
+    # def print_collections(self):
+    #     """
+    #     Временный.
+    #     Вывод всех коллекций на экран.
+    #     """
+    #     print('queue')
+    #     print(self.queues)
+    #     print('set')
+    #     print(self.sets)
+    #     print('points')
+    #     print(f'start_point_save = {self.start_point_save} \n'
+    #           f'end_point_save = {self.end_point_save}')
 
 
-class Coordinates:
-    def __init__(self, coordinates):
-        """
-        Класс принимающий в себя координаты и распаривающий их.
-        """
-        # Хранит в себе кортеж с двумя кортежами внутри которых лежат координаты
-        self.coordinates = coordinates
-        # crd_1 и crd_2 - хранят в себе первый и второй кортежи координат
-        self.coordinate_1 = self.coordinates[0]
-        self.coordinate_2 = self.coordinates[1]
-        # х и у - хранят в себе элементы первого кортежа
-        self.x = self.coordinates[0][0]
-        self.y = self.coordinates[0][1]
+# class Coordinates:
+#     def __init__(self, coordinates):
+#         """
+#         Класс принимающий в себя координаты и распаривающий их.
+#         """
+#         # Хранит в себе кортеж с двумя кортежами внутри которых лежат координаты
+#         self.coordinates = coordinates
+#         # crd_1 и crd_2 - хранят в себе первый и второй кортежи координат
+#         self.coordinate_1 = self.coordinates[0]
+#         self.coordinate_2 = self.coordinates[1]
+#         # х и у - хранят в себе элементы первого кортежа
+#         self.x = self.coordinates[0][0]
+#         self.y = self.coordinates[0][1]
+#
+#     def __eq__(self, other):
+#         return self.coordinates == self.coordinates
