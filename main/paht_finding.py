@@ -20,6 +20,7 @@ class PathFinder:
         # Инициализируем очередь, множество и коллекцию для посещенных объектов
         self.queues = deque()
         self.sets = set()
+        self.graph = dict()
 
         # Резервируем начало и конец
         self.start_point_save = None
@@ -28,6 +29,93 @@ class PathFinder:
         # Запуск всех методов
         self.start_point()
         # self.print_collections()
+
+    def return_path(self):
+        """
+        Временный метод который будет интегрирован в поиск пути
+        """
+        pass
+
+    def filling_queue(self, coordinates, crd_1, crd_2):
+        """
+        Метод позволяющий заполнять корректно очередь
+        для поиска пути.
+        P.S. Опция - Инкапсуляция.
+        :param coordinates: принимаем координаты стартовой точки.
+        :param crd_1: принимаем сдвиг по первой координате.
+        :param crd_2: принимаем сдвиг по второй координате.
+        """
+        # Условие корректного заполнения очереди
+        if (0 <= coordinates.x + crd_1 < self.matrix.height) and (0 <= coordinates.y + crd_2 < self.matrix.width):
+
+            # Проверяем не находятся ли объекты по этим координатам
+            if self.matrix.is_empty(coordinates.x + crd_1, coordinates.y + crd_2):
+                coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
+                # Проверка: не обработаны ли эти координаты ранее
+                # flag = True
+                """
+                Идея - создать словарь который будет хранить в себе смежные координаты.
+                В качестве ключа будет использоваться координата с которой смотрим.
+                В качестве значений будет использоваться список координат.
+                """
+                if coordinated not in self.graph[coordinates]:
+                    self.graph[coordinates].append(coordinated)
+
+                if coordinated is not self.sets:
+                    self.queues.append(coordinated)
+
+                # if coordinated.__hash__ in self.sets:
+                #     flag = False
+                # for element in self.sets:
+                #    if coordinated.coordinates == element.coordinates:
+                #        flag = False
+                #        break
+
+            # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
+            elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.victim:
+                coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
+                self.queues.append(coordinated)
+                self.graph[coordinates].append(coordinated)
+
+    def path_finder(self):
+        """
+        Алгоритм поиска пути в ширину.
+        PS. Опция - Инкапсуляция
+        """
+        # Работает пока очередь не пуста или не выполнено условие остановки
+        while True:
+            # Забираем координаты стартовой точки
+            if len(self.queues) > 0:
+                coordinates = self.queues.popleft()
+                self.graph[coordinates] = []
+
+                # Заполняем очередь
+                self.filling_queue(coordinates, +1, 0)
+                self.filling_queue(coordinates, -1, 0)
+                self.filling_queue(coordinates, 0, +1)
+                self.filling_queue(coordinates, 0, -1)
+
+                self.sets.update((coordinates,))
+
+                # Алгоритм для корректного добавления координат в множество
+                # flag = True
+                # for element in self.sets:
+                #     if coordinates.coordinates[0] == element.coordinates[1]:
+                #         flag = False
+                #         break
+                #
+                # # Если флаг истинный добавляем в множество наш кортеж
+                # if flag:
+                #     self.sets.update(coordinates)
+
+                # Останавливаем алгоритм если находим необходимый объект
+                if not self.matrix.is_empty(coordinates.x, coordinates.y):
+                    if self.matrix.get_object(coordinates.x, coordinates.y).sprite == self.victim:
+                        self.end_point_save = coordinates
+                        # self.queues.clear()
+                        break
+            elif len(self.queues) == 0:
+                break
 
     def check_objects(self, hunters, x, y):
         """
@@ -48,17 +136,19 @@ class PathFinder:
             self.victim = 'Hrb'
 
         if self.hunter is not None:
-            coordinated = coordinate.Coordinates(((x, y), (x, y)))
+            coordinated = coordinate.Coordinates(x, y)
             self.queues.appendleft(coordinated)
-            self.start_point_save = coordinated.coordinates[0]
+            self.start_point_save = coordinated
             # Далее будет вызываться метод path_finder
             # Который очистит очередь для дальнейшего использования
             self.path_finder()
-            self.overcome_path()
-            self.moving_object()
+            self.print_collections()
+            # self.overcome_path()
+            # self.moving_object()
             # После использования всех коллекций очищаем их для корректной работы следующего объекта
             self.queues.clear()
             self.sets.clear()
+            self.graph.clear()
             self.start_point_save = None
             self.end_point_save = None
             self.hunter = None
@@ -74,133 +164,73 @@ class PathFinder:
                     creatures = self.matrix.get_object(i, j)
                     self.check_objects(creatures, i, j)
 
-    def filling_queue(self, coordinates, crd_1, crd_2):
+    def print_collections(self):
         """
-        Метод позволяющий заполнять корректно очередь
-        для поиска пути.
-        P.S. Опция - Инкапсуляция.
-        :param coordinates: принимаем координаты стартовой точки.
-        :param crd_1: принимаем сдвиг по первой координате.
-        :param crd_2: принимаем сдвиг по второй координате.
+        Временный.
+        Вывод всех коллекций на экран.
         """
-        # Условие корректного заполнения очереди
-        if (0 <= coordinates.x + crd_1 < self.matrix.height) and (0 <= coordinates.y + crd_2 < self.matrix.width):
+        print('queue')
+        for i in self.queues:
+            print((i.x, i.y), end='; ')
+        print()
+        print('set')
+        for i in self.sets:
+            print((i.x, i.y), end='; ')
+        print()
+        print('points')
+        print(f'start_point_save = {(self.start_point_save.x, self.start_point_save.y)} \n'
+              f'end_point_save = {(self.end_point_save.x, self.end_point_save.y)}')
+        print()
+        print('Graph:')
+        for key in self.graph:
+            print((key.x, key.y), [(i.x, i.y) for i in self.graph[key]])
 
-            # Проверяем не находятся ли объекты по этим координатам
-            if self.matrix.is_empty(coordinates.x + crd_1, coordinates.y + crd_2):
-                coordinated = coordinate.Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
-                                                      (coordinates.x, coordinates.y)))
-                # Проверка: не обработаны ли эти координаты ранее
-                flag = True
-                for element in self.sets:
-                    if coordinated.coordinates == element.coordinates:
-                        flag = False
-                        break
-
-                if flag:
-                    self.queues.append(coordinated)
-            # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
-            elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.victim:
-                coordinated = coordinate.Coordinates(((coordinates.x + crd_1, coordinates.y + crd_2),
-                                                      (coordinates.x, coordinates.y)))
-                self.queues.append(coordinated)
-
-    def path_finder(self):
-        """
-        Алгоритм поиска пути в ширину.
-        PS. Опция - Инкапсуляция
-        """
-        # Работает пока очередь не пуста или не выполнено условие остановки
-        while True:
-            # Забираем координаты стартовой точки
-            if len(self.queues) > 0:
-                coordinates = self.queues.popleft()
-
-                # Заполняем очередь
-                self.filling_queue(coordinates, +1, 0)
-                self.filling_queue(coordinates, -1, 0)
-                self.filling_queue(coordinates, 0, +1)
-                self.filling_queue(coordinates, 0, -1)
-
-                # Алгоритм для корректного добавления координат в множество
-                flag = True
-                for element in self.sets:
-                    if coordinates.coordinates[0] == element.coordinates[1]:
-                        flag = False
-                        break
-
-                # Если флаг истинный добавляем в множество наш кортеж
-                if flag:
-                    self.sets.update((coordinates,))
-
-                # Останавливаем алгоритм если находим необходимый объект
-                if not self.matrix.is_empty(coordinates.x, coordinates.y):
-                    if self.matrix.get_object(coordinates.x, coordinates.y).sprite == self.victim:
-                        self.end_point_save = coordinates.coordinates[0]
-                        self.queues.clear()
-                        break
-            elif len(self.queues) == 0:
-                break
-
-    def overcome_path(self):
-        """
-        Возвращаем путь
-        P.S. Переписать в более классический способ
-        """
-        if self.end_point_save is not None:
-            self.queues.append(self.end_point_save)
-
-        while len(self.queues) > 0:
-            # Перебираем наше множество
-            for elements in self.sets:
-                if (self.queues[0] == elements.coordinates[0]) and (elements.coordinates[1] not in self.queues):
-                    self.queues.appendleft(elements.coordinates[1])
-
-            if self.start_point_save == self.queues[0]:
-                break
-
-    def moving_object(self):
-        """
-        Метод двигающий объект к цели.
-        Первое время он показываем путь, который проходит объект.
-        P.S. Вынести в методы существ
-        """
-        # Двигаем объект к цели
-        """
-        1) Если длина пути больше двух:
-        2) Вынимаем объект из карты
-        3) Запускаем цикл for равной длине нашей очереди или 
-        (Количеству клеток которое может пройти существо за одну итерацию):
-            4) Вынимаем координаты из очереди
-            5) Если это не первый и не последний элемент в очереди:
-                6) Начинаем перемещение объекта следующим образом:
-                        Добавляем объект по новым координатам в словарь
-                        Резервируем старые координаты в переменную
-                        Удаляем объект по старым координатам 
-        """
-        if len(self.queues) > 2:
-            objects = self.matrix.get_object(self.start_point_save[0], self.start_point_save[1])
-            # Параметр range будет принимать параметр скорости существ
-            for element in range(2):
-                coordinates = self.queues[element]
-                if (coordinates != self.queues[0]) and (coordinates != self.queues[-1]):
-                    self.matrix.add_object(objects, coordinates[0], coordinates[1])
-                    coordinates_del = self.queues[element-1]
-                    self.matrix.delete_objects(coordinates_del[0], coordinates_del[1])
-
-    # def print_collections(self):
+    # def overcome_path(self):
     #     """
-    #     Временный.
-    #     Вывод всех коллекций на экран.
+    #     Возвращаем путь
+    #     P.S. Переписать в более классический способ
     #     """
-    #     print('queue')
-    #     print(self.queues)
-    #     print('set')
-    #     print(self.sets)
-    #     print('points')
-    #     print(f'start_point_save = {self.start_point_save} \n'
-    #           f'end_point_save = {self.end_point_save}')
+    #     if self.end_point_save is not None:
+    #         self.queues.append(self.end_point_save)
+    #
+    #     while len(self.queues) > 0:
+    #         # Перебираем наше множество
+    #         for elements in self.sets:
+    #             if (self.queues[0] == elements.coordinates[0]) and (elements.coordinates[1] not in self.queues):
+    #                 self.queues.appendleft(elements.coordinates[1])
+    #
+    #         if self.start_point_save == self.queues[0]:
+    #             break
 
+    # def moving_object(self):
+    #     """
+    #                     Метод двигающий объект к цели.
+    #                     Первое время он показываем путь, который проходит объект.
+    #                     P.S. Вынести в методы существ
+    #                     """
+    #     # Двигаем объект к цели
+    #     """
+    #     1) Если длина пути больше двух:
+    #     2) Вынимаем объект из карты
+    #     3) Запускаем цикл for равной длине нашей очереди или
+    #     (Количеству клеток которое может пройти существо за одну итерацию):
+    #         4) Вынимаем координаты из очереди
+    #         5) Если это не первый и не последний элемент в очереди:
+    #             6) Начинаем перемещение объекта следующим образом:
+    #                     Добавляем объект по новым координатам в словарь
+    #                     Резервируем старые координаты в переменную
+    #                     Удаляем объект по старым координатам
+    #     """
+    #     if len(self.queues) > 2:
+    #         objects = self.matrix.get_object(self.start_point_save[0], self.start_point_save[1])
+    #         # Параметр range будет принимать параметр скорости существ
+    #         for element in range(2):
+    #             coordinates = self.queues[element]
+    #             if (coordinates != self.queues[0]) and (coordinates != self.queues[-1]):
+    #                 self.matrix.add_object(objects, coordinates[0], coordinates[1])
+    #                 coordinates_del = self.queues[element-1]
+    #                 self.matrix.delete_objects(coordinates_del[0], coordinates_del[1])
+    #
 
 # class Coordinates:
 #     def __init__(self, coordinates):

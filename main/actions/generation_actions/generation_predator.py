@@ -7,7 +7,7 @@ class GenerationPredator(generate.Generate):
     def __init__(self, matrix):
         super().__init__(matrix)
         # Максимальное Количество хищников на карте
-        self.object_quantity = 1
+        self.object_quantity = 0
         # Счетчик хищников
         self.count_object = 0
         # Объект для корректной работы словаря в information и цикла в generate
