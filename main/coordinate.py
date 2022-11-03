@@ -13,6 +13,5 @@ class Coordinates:
         """
         return self.x == other.x and self.y == other.y
 
-    #
     def __hash__(self):
-        return hash(self.__class__)
+        return hash(self.__class__ and self.x and self.y)

@@ -8,7 +8,7 @@ class PathFinder:
         Общий класс поиска пути.
         На вход принимает параметры:
         :param hunter: класс, который будет охотиться.
-        :param victim: класс, на который будут - охотится.
+        :param victim: класс, на который будут - охотиться.
         :param matrix: объект класса карты с которым будем работать
 
         P.S. Все методы где описана "Опция" - являются расширяемыми и
@@ -28,18 +28,33 @@ class PathFinder:
 
         # Запуск всех методов
         self.start_point()
-        # self.print_collections()
 
     def return_path(self):
         """
         Временный метод который будет интегрирован в поиск пути
         """
-        pass
+        """
+        Примерный алгоритм:
+        1) объявляем переменную coordinates и присваиваем ей значение переменной end_point
+        2) Включаем цикл while проверяем - есть ли ключ с такими коордитатами в нашем графе (self.graph), 
+            если да - добавляем координату coordinates в очередь (self.queue),
+            после чего присваиваем ей (coordinates) значение из нашего self.graph и ищем ключ с новыми координатами
+        3) Остановка цикла произойдет когда переменная coordinates == start_point
+        4) Функция возвращает путь (self.queue) для дальнейшего использования
+        """
+        coordinates = self.end_point_save
+        while True:
+            if coordinates in self.graph:
+                self.queues.appendleft(coordinates)
+                coordinates = self.graph[coordinates]
+
+            if coordinates == self.start_point_save:
+                self.queues.appendleft(coordinates)
+                break
 
     def filling_queue(self, coordinates, crd_1, crd_2):
         """
-        Метод позволяющий заполнять корректно очередь
-        для поиска пути.
+        Метод заполняющий очередь массивом путей
         P.S. Опция - Инкапсуляция.
         :param coordinates: принимаем координаты стартовой точки.
         :param crd_1: принимаем сдвиг по первой координате.
@@ -51,35 +66,31 @@ class PathFinder:
             # Проверяем не находятся ли объекты по этим координатам
             if self.matrix.is_empty(coordinates.x + crd_1, coordinates.y + crd_2):
                 coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
-                # Проверка: не обработаны ли эти координаты ранее
-                # flag = True
                 """
-                Идея - создать словарь который будет хранить в себе смежные координаты.
-                В качестве ключа будет использоваться координата с которой смотрим.
-                В качестве значений будет использоваться список координат.
+                Идея - создать словарь который будет хранить в себе два вида координат.
+                В качестве ключа будет использоваться координата с которой пришли. 
+                    (coordinated).
+                В качестве значения будет использоваться координата на которую пришли.
+                    (coordinates)
+                Словарь (self.graph) будет обрабатываться задом наперед, с точки endpoint к
+                точке start point.
                 """
-                if coordinated not in self.graph[coordinates]:
-                    self.graph[coordinates].append(coordinated)
+                if coordinated not in self.graph:
+                    self.graph[coordinated] = coordinates
 
-                if coordinated is not self.sets:
+                if coordinated not in self.sets and coordinated not in self.queues:
                     self.queues.append(coordinated)
-
-                # if coordinated.__hash__ in self.sets:
-                #     flag = False
-                # for element in self.sets:
-                #    if coordinated.coordinates == element.coordinates:
-                #        flag = False
-                #        break
 
             # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
             elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.victim:
                 coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
                 self.queues.append(coordinated)
-                self.graph[coordinates].append(coordinated)
+                self.graph[coordinated] = coordinates
 
     def path_finder(self):
         """
         Алгоритм поиска пути в ширину.
+        Метод возвращает массив с путем
         PS. Опция - Инкапсуляция
         """
         # Работает пока очередь не пуста или не выполнено условие остановки
@@ -87,7 +98,9 @@ class PathFinder:
             # Забираем координаты стартовой точки
             if len(self.queues) > 0:
                 coordinates = self.queues.popleft()
-                self.graph[coordinates] = []
+
+                if coordinates not in self.graph:
+                    self.graph[coordinates] = coordinates
 
                 # Заполняем очередь
                 self.filling_queue(coordinates, +1, 0)
@@ -97,30 +110,19 @@ class PathFinder:
 
                 self.sets.update((coordinates,))
 
-                # Алгоритм для корректного добавления координат в множество
-                # flag = True
-                # for element in self.sets:
-                #     if coordinates.coordinates[0] == element.coordinates[1]:
-                #         flag = False
-                #         break
-                #
-                # # Если флаг истинный добавляем в множество наш кортеж
-                # if flag:
-                #     self.sets.update(coordinates)
-
                 # Останавливаем алгоритм если находим необходимый объект
                 if not self.matrix.is_empty(coordinates.x, coordinates.y):
                     if self.matrix.get_object(coordinates.x, coordinates.y).sprite == self.victim:
                         self.end_point_save = coordinates
-                        # self.queues.clear()
+                        self.queues.clear()
                         break
             elif len(self.queues) == 0:
                 break
 
     def check_objects(self, hunters, x, y):
         """
-        Метод для проверки кто у нас охотник
-        и корректной работе алгоритма.
+        Метод для проверки кто у нас охотник и жертва
+        и корректной работе алгоритма. (Очистка всех полей класса)
         P.S. Опция - Инкапсуляция.
         :param hunters: в зависимости от этого параметра
          будет определяться жертва.
@@ -141,10 +143,14 @@ class PathFinder:
             self.start_point_save = coordinated
             # Далее будет вызываться метод path_finder
             # Который очистит очередь для дальнейшего использования
+<<<<<<< Updated upstream
             self.path_finder()
+            self.return_path()
+            """Тут должен будет быть метод return_path"""
+=======
+            path_list = self.path_finder()
+>>>>>>> Stashed changes
             self.print_collections()
-            # self.overcome_path()
-            # self.moving_object()
             # После использования всех коллекций очищаем их для корректной работы следующего объекта
             self.queues.clear()
             self.sets.clear()
@@ -153,10 +159,11 @@ class PathFinder:
             self.end_point_save = None
             self.hunter = None
             self.victim = None
+            return path_list
 
     def start_point(self):
         """
-        Функция для добавления стартовой позиции
+        Функция для поиска стартовой позиции
         """
         for i in range(self.matrix.height):
             for j in range(self.matrix.width):
@@ -182,8 +189,10 @@ class PathFinder:
               f'end_point_save = {(self.end_point_save.x, self.end_point_save.y)}')
         print()
         print('Graph:')
-        for key in self.graph:
-            print((key.x, key.y), [(i.x, i.y) for i in self.graph[key]])
+        # for key in self.graph:
+        #     print((key.x, key.y), [(i.x, i.y) for i in self.graph[key]])
+        for key, value in self.graph.items():
+            print((key.x, key.y), ':', (value.x, value.y))
 
     # def overcome_path(self):
     #     """
