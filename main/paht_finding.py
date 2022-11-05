@@ -121,16 +121,7 @@ class PathFinder:
             self.start_point_save = coordinated
             # Далее будет вызываться метод path_finder
             # Который очистит очередь для дальнейшего использования
-<<<<<<< Updated upstream
-            self.path_finder()
-<<<<<<< HEAD
-            self.return_path()
-            """Тут должен будет быть метод return_path"""
-=======
             path_list = self.path_finder()
->>>>>>> Stashed changes
-=======
->>>>>>> 85841eb (Реализован класс Алгорритма поиска пути)
             self.print_collections()
             # После использования всех коллекций очищаем их для корректной работы следующего объекта
             self.queues.clear()
