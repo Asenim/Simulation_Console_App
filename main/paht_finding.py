@@ -75,8 +75,11 @@ class PathFinder:
     def path_finder(self):
         """
         Алгоритм поиска пути в ширину.
-        Метод возвращает массив с путем
-        PS. Опция - Инкапсуляция
+        Метод возвращает массив с путем или заканчивает поиск если искомый объект не найден.
+        PS. Опция - Инкапсуляция.
+        :return path_list: path_list[0] - это точка на которой расположен охотник,
+        path_list[-1] - это точка на которой расположена добыча, что бы встать "возле" добычи
+        нужно исключить последний индекс
         """
         # Работает пока очередь не пуста или не выполнено условие остановки
         while True:
@@ -126,5 +129,8 @@ class PathFinder:
             print((i.x, i.y), end='; ')
         print()
         print('points')
-        print(f'start_point_save = {(self.start_point_save.x, self.start_point_save.y)} \n'
-              f'end_point_save = {(self.end_point_save.x, self.end_point_save.y)}')
+        print(f'start_point_save = {(self.start_point_save.x, self.start_point_save.y)}')
+        if self.end_point_save is not None:
+            print(f'end_point_save = {(self.end_point_save.x, self.end_point_save.y)}')
+        else:
+            print('end_point_save - точка не найдена')

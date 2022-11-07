@@ -1,3 +1,6 @@
+from main import coordinate
+
+
 class Map:
     def __init__(self, height, width):
         """
@@ -23,7 +26,7 @@ class Map:
         :param x: координата объекта
         :param y: координата объекта
         """
-        coordinates = (x, y)
+        coordinates = coordinate.Coordinates(x, y)
         self.__dict_object[coordinates] = objects
 
     def get_object(self, x, y):
@@ -34,7 +37,7 @@ class Map:
         :param y: координата объекта
         :return: объект находящийся по переданным координатам
         """
-        coordinates = (x, y)
+        coordinates = coordinate.Coordinates(x, y)
         if coordinates in self.__dict_object:
             return self.__dict_object[coordinates]
 
@@ -47,7 +50,7 @@ class Map:
         :return: Если координат нет в словаре возвращает True,
         если они есть в словаре возвращает False
         """
-        coordinates = (x, y)
+        coordinates = coordinate.Coordinates(x, y)
         if coordinates not in self.__dict_object:
             return True
         else:
@@ -59,7 +62,7 @@ class Map:
         :param x: координата объекта
         :param y: координата объекта
         """
-        coordinates = (x, y)
+        coordinates = coordinate.Coordinates(x, y)
         del self.__dict_object[coordinates]
 
     def map_size(self):
