@@ -14,6 +14,6 @@ class GenerationGrass(generate.Generate):
 
     def spawn_object(self, num_1, num_2):
         # Размещаем объекты в карте
-        self.matrix.add_object(grass.Grass(self.matrix.height, self.matrix.width), num_1, num_2)
+        self.matrix.add_object(grass.Grass(num_1, num_2), num_1, num_2)
         # После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
         self.count_object = 0

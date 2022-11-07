@@ -9,7 +9,7 @@ class Coordinates:
     def __eq__(self, other):
         """
         Если значения в кортеже равны у двух объектов:
-        Возвращает True
+        :return: True или False
         """
         return self.x == other.x and self.y == other.y
 

@@ -50,7 +50,6 @@ class GenerationHerbivore(generate.Generate):
         self.matrix.add_object(herbivore.Herbivore(speed=2, hit_point=10, max_hit_point=10,
                                                    gender=random.choice(['male', 'female']),
                                                    restore_hp_eat_grass=random.randint(1, 3),
-                                                   x=self.matrix.height, y=self.matrix.width),
-                               num_1, num_2)
+                                                   x=num_1, y=num_2), num_1, num_2)
         # После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
         self.count_object = 0

@@ -25,7 +25,7 @@ class GenerationPredator(generate.Generate):
                                                   successful_hunting=3,
                                                   restore_hp_successful_hunt=random.randint(1, 2),
                                                   range_attack=random.randint(1, 2),
-                                                  x=self.matrix.height, y=self.matrix.width),
+                                                  x=num_1, y=num_2),
                                num_1, num_2)
         # После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
         self.count_object = 0
