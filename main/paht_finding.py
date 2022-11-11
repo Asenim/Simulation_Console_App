@@ -14,34 +14,30 @@ class PathFinder:
         дополняемыми после обсуждения и одобрения.
         """
         self.matrix = matrix
-        self.hunter = None
-        self.victim = None
+        self.__hunter = None
+        self.__victim = None
         # Инициализируем очередь, множество и коллекцию для посещенных объектов
-        self.queues = deque()
-        self.sets = set()
+        self.__queues = deque()
+        self.__sets = set()
 
         # Резервируем начало и конец
-        self.start_point_save = None
-        self.end_point_save = None
+        self.__start_point_save = None
+        self.__end_point_save = None
 
         # Объявляем поля класса
         if hunter.sprite == 'Hrb':
-            self.hunter = hunter
-            self.victim = 'Gs'
+            self.__hunter = hunter
+            self.__victim = 'Gs'
         elif hunter.sprite == 'Prd':
-            self.hunter = hunter
-            self.victim = 'Hrb'
+            self.__hunter = hunter
+            self.__victim = 'Hrb'
 
-        if self.hunter is not None:
-            coordinated = coordinate.Coordinates(self.hunter.x, self.hunter.y)
-            self.queues.appendleft([coordinated])
-            self.start_point_save = coordinated
+        if self.__hunter is not None and self.__victim is not None:
+            coordinated = coordinate.Coordinates(self.__hunter.x, self.__hunter.y)
+            self.__queues.appendleft([coordinated])
+            self.__start_point_save = coordinated
 
-            # Запуск всех методов
-            # self.path_list = self.path_finder()
-            # self.print_collections()
-
-    def filling_queue(self, path_list, crd_1, crd_2):
+    def __filling_queue(self, path_list, crd_1, crd_2):
         """
         Метод заполняющий очередь массивом путей
         P.S. Опция - Инкапсуляция.
@@ -59,23 +55,22 @@ class PathFinder:
             if self.matrix.is_empty(coordinates.x + crd_1, coordinates.y + crd_2):
                 coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
 
-                if coordinated not in self.sets:
+                if coordinated not in self.__sets:
                     new_path_list = path_list.copy()
                     new_path_list.append(coordinated)
-                    self.queues.append(new_path_list)
+                    self.__queues.append(new_path_list)
 
             # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
-            elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.victim:
+            elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.__victim:
                 coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
                 new_path_list = path_list.copy()
                 new_path_list.append(coordinated)
-                self.queues.append(new_path_list)
+                self.__queues.append(new_path_list)
 
     def path_finder(self):
         """
         Алгоритм поиска пути в ширину.
         Метод возвращает массив с путем или заканчивает поиск если искомый объект не найден.
-        PS. Опция - Инкапсуляция.
         :return path_list: path_list[0] - это точка на которой расположен охотник,
         path_list[-1] - это точка на которой расположена добыча, что бы встать "возле" добычи
         нужно исключить последний индекс
@@ -83,53 +78,24 @@ class PathFinder:
         # Работает пока очередь не пуста или не выполнено условие остановки
         while True:
             # Забираем координаты стартовой точки
-            if len(self.queues) > 0:
-                path_list = self.queues.popleft()
+            if len(self.__queues) > 0:
+                path_list = self.__queues.popleft()
 
                 # Заполняем очередь
-                self.filling_queue(path_list, +1, 0)
-                self.filling_queue(path_list, -1, 0)
-                self.filling_queue(path_list, 0, +1)
-                self.filling_queue(path_list, 0, -1)
+                self.__filling_queue(path_list, +1, 0)
+                self.__filling_queue(path_list, -1, 0)
+                self.__filling_queue(path_list, 0, +1)
+                self.__filling_queue(path_list, 0, -1)
 
-                self.sets.add(path_list[-1])
+                self.__sets.add(path_list[-1])
 
                 # Останавливаем цикл и возвращаем искомый путь для дальнейшего пользования
                 if not self.matrix.is_empty(path_list[-1].x, path_list[-1].y):
-                    if self.matrix.get_object(path_list[-1].x, path_list[-1].y).sprite == self.victim:
-                        self.end_point_save = path_list[-1]
-                        """
-                        Проверка корректности пути - временный
-                        """
-                        print('path')
-                        for i in path_list:
-                            print((i.x, i.y), end='; ')
-                        print()
+                    if self.matrix.get_object(path_list[-1].x, path_list[-1].y).sprite == self.__victim:
+                        self.__end_point_save = path_list[-1]
 
                         # Возвращаем путь
                         return path_list
 
-            elif len(self.queues) == 0:
+            elif len(self.__queues) == 0:
                 return None
-
-    def print_collections(self):
-        """
-        Временный.
-        Вывод всех коллекций на экран.
-        """
-        print('queue')
-        for lists in self.queues:
-            for j in lists:
-                print((j.x, j.y), end='; ')
-            print()
-        print()
-        print('set')
-        for i in self.sets:
-            print((i.x, i.y), end='; ')
-        print()
-        print('points')
-        print(f'start_point_save = {(self.start_point_save.x, self.start_point_save.y)}')
-        if self.end_point_save is not None:
-            print(f'end_point_save = {(self.end_point_save.x, self.end_point_save.y)}')
-        else:
-            print('end_point_save - точка не найдена')

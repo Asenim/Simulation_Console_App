@@ -1,6 +1,5 @@
 from main import paht_finding
 from main.actions import actions
-from main.maps_and_render import render
 
 
 class MoveCreaturesAction(actions.Actions):
@@ -12,45 +11,52 @@ class MoveCreaturesAction(actions.Actions):
         self.matrix = matrix
 
     def perform(self):
-        self.move_creature()
+        self.__paht_creatures()
 
-    def paht_creatures(self):
+    def __paht_creatures(self):
         """
         Функция для поиска стартовой позиции
         Сначала ищется стартовая позиция объекта.
         Затем создается объект класса поиска пути.
-        После этого вызывается метод поиска
-        Если путь найден - он печатается и возвращается
-        :return path_lists: готовый путь
+        Потом поправляются индексы на актуальные.
+        После этого создаётся объект и вызывается метод поиска.
+        Если путь найден - он возвращается в переменную и затем
+            передаётся в метод двигающих существ.
+        Под конец сходивший объект добавляется в список существ
+            которые сделали свой ход.
         """
+        # Список в котором будут храниться существа сделавшие ход
+        moving_creatures = []
+
         for i in range(self.matrix.height):
             for j in range(self.matrix.width):
                 if not self.matrix.is_empty(i, j):
                     creatures = self.matrix.get_object(i, j)
-                    path = paht_finding.PathFinder(matrix=self.matrix,
-                                                   hunter=creatures)
+                    creatures.x = i
+                    creatures.y = j
+                    path = paht_finding.PathFinder(matrix=self.matrix, hunter=creatures)
                     path_lists = path.path_finder()
-                    if path_lists is not None:
-                        print('Готовый путь')
+                    if path_lists is not None and creatures not in moving_creatures:
+                        print(f'Готовый путь {creatures}')
                         for crd in path_lists:
                             print((crd.x, crd.y), end='; ')
                         print()
-                        return path_lists
+                        self.__move_creature(path_lists)
+                        moving_creatures.append(creatures)
 
-    def move_creature(self):
+    def __move_creature(self, path_list):
         """
         Метод который позволяет перемещать существ на карте
         """
-        # Временная переменная
-        renderer = render.Render(self.matrix)
-
         # Список содержащий объекты координат
-        path_object = self.paht_creatures()
+        path = path_list
 
-        for i in range(len(path_object)-2):
-            creatures = self.matrix.get_object(path_object[i].x, path_object[i].y)
-            self.matrix.add_object(creatures, path_object[i+1].x, path_object[i+1].y)
-            self.matrix.delete_object(path_object[i].x, path_object[i].y)
-            print('===========')
-            renderer.print_map()
-            print('===========')
+        if len(path) > 3:
+            creatures = self.matrix.get_object(path[0].x, path[0].y)
+            self.matrix.add_object(creatures, path[2].x, path[2].y)
+            self.matrix.delete_object(path[0].x, path[0].y)
+        elif len(path) > 2:
+            creatures = self.matrix.get_object(path[0].x, path[0].y)
+            self.matrix.add_object(creatures, path[1].x, path[1].y)
+            self.matrix.delete_object(path[0].x, path[0].y)
+        print('===========')
