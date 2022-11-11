@@ -4,7 +4,7 @@ from main.actions.generation_actions import generation_rock
 from main.actions.generation_actions import generation_grass
 from main.actions.generation_actions import generation_herbivore
 from main.actions.generation_actions import generation_predator
-from main import actions_iteraible
+from main import move_creatures_action
 
 
 class Simulation:
@@ -38,10 +38,10 @@ class Simulation:
         print('----------------------')
 
         # Создаём объект класса actions и объект класса поиска пути
-        self.actions_iterables = actions_iteraible.ActionsIterable(self.matrix)
+        self.move_creatures = move_creatures_action.MoveCreaturesAction(self.matrix)
 
         print("=====================")
-        self.actions_iterables.perform()
+        self.move_creatures.perform()
         self.renderer.print_map()
         print('====================')
 

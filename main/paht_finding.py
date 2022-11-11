@@ -38,8 +38,8 @@ class PathFinder:
             self.start_point_save = coordinated
 
             # Запуск всех методов
-            self.path_finder()
-            self.print_collections()
+            # self.path_list = self.path_finder()
+            # self.print_collections()
 
     def filling_queue(self, path_list, crd_1, crd_2):
         """
@@ -50,15 +50,14 @@ class PathFinder:
         :param crd_2: принимаем сдвиг по второй координате.
         """
         # Переменная хранящая в себе массив с путем извлеченный мз очереди
-        coordinates = path_list
+        coordinates = path_list[-1]
 
         # Условие корректного заполнения очереди
-        if (0 <= coordinates[-1].x + crd_1 < self.matrix.height) and\
-                (0 <= coordinates[-1].y + crd_2 < self.matrix.width):
+        if (0 <= coordinates.x + crd_1 < self.matrix.height) and (0 <= coordinates.y + crd_2 < self.matrix.width):
 
             # Проверяем не находятся ли объекты по этим координатам
-            if self.matrix.is_empty(coordinates[-1].x + crd_1, coordinates[-1].y + crd_2):
-                coordinated = coordinate.Coordinates(coordinates[-1].x + crd_1, coordinates[-1].y + crd_2)
+            if self.matrix.is_empty(coordinates.x + crd_1, coordinates.y + crd_2):
+                coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
 
                 if coordinated not in self.sets:
                     new_path_list = path_list.copy()
@@ -66,8 +65,8 @@ class PathFinder:
                     self.queues.append(new_path_list)
 
             # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
-            elif self.matrix.get_object(coordinates[-1].x + crd_1, coordinates[-1].y + crd_2).sprite == self.victim:
-                coordinated = coordinate.Coordinates(coordinates[-1].x + crd_1, coordinates[-1].y + crd_2)
+            elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.victim:
+                coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
                 new_path_list = path_list.copy()
                 new_path_list.append(coordinated)
                 self.queues.append(new_path_list)
@@ -111,7 +110,7 @@ class PathFinder:
                         return path_list
 
             elif len(self.queues) == 0:
-                break
+                return None
 
     def print_collections(self):
         """

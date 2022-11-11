@@ -56,7 +56,7 @@ class Map:
         else:
             return False
 
-    def delete_objects(self, x, y):
+    def delete_object(self, x, y):
         """
         Метод позволяющий удалять объект с карты
         :param x: координата объекта
