@@ -37,7 +37,7 @@ class MoveCreaturesAction(actions.Actions):
                     path = paht_finding.PathFinder(matrix=self.matrix, hunter=creatures)
                     path_lists = path.path_finder()
                     if path_lists is not None and creatures not in moving_creatures:
-                        print(f'Готовый путь {creatures}')
+                        print(f'Готовый путь {creatures.sprite, creatures.speed}')
                         for crd in path_lists:
                             print((crd.x, crd.y), end='; ')
                         print()
@@ -51,12 +51,11 @@ class MoveCreaturesAction(actions.Actions):
         # Список содержащий объекты координат
         path = path_list
 
-        if len(path) > 3:
-            creatures = self.matrix.get_object(path[0].x, path[0].y)
-            self.matrix.add_object(creatures, path[2].x, path[2].y)
+        creatures = self.matrix.get_object(path[0].x, path[0].y)
+        if len(path) > creatures.speed:
+            self.matrix.add_object(creatures, path[creatures.speed - 1].x, path[creatures.speed - 1].y)
             self.matrix.delete_object(path[0].x, path[0].y)
-        elif len(path) > 2:
-            creatures = self.matrix.get_object(path[0].x, path[0].y)
+        else:
             self.matrix.add_object(creatures, path[1].x, path[1].y)
             self.matrix.delete_object(path[0].x, path[0].y)
         print('===========')

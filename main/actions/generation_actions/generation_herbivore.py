@@ -38,7 +38,7 @@ class GenerationHerbivore(generate.Generate):
         # Количество травоядных
         self.object_quantity = 1
         # Счётчик травоядных
-        self.count_object = 0
+        self.count_object = 1
         # Объект для корректной работы словаря в information и цикла в generate
         self.object = herbivore.Herbivore(speed=2, hit_point=10, max_hit_point=10,
                                           gender=random.choice(['male', 'female']),
