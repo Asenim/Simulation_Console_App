@@ -17,8 +17,14 @@ class Herbivore(creatures.Creatures):
     def make_move(self):
         pass
 
-    def eat_grass(self):
-        pass
+    def eat_grass(self, maps, coordinate_object):
+        matrix = maps
+        coordinate = coordinate_object
+        if not matrix.is_empty(coordinate.x, coordinate.y):
+            creature = matrix.get_object(coordinate.x, coordinate.y)
+            if creature.sprite == 'Gs':
+                matrix.delete_object(coordinate.x, coordinate.y)
+                self.hit_point = self.hit_point + self.restore_hp_eat_grass
 
     def reproduction(self):
         pass

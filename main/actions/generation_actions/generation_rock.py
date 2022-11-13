@@ -6,7 +6,7 @@ class GenerationRock(generate.Generate):
     def __init__(self, matrix):
         super().__init__(matrix)
         # Необходимое количество камня на карте
-        self.object_quantity = int(self.matrix_cells * 0.09)
+        self.object_quantity = int(self.matrix_cells * 0.08)
         # Счётчик камня
         self.count_object = 0
         # Объект для подсчёта в information и generate

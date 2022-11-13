@@ -4,7 +4,8 @@ from main.actions.generation_actions import generation_rock
 from main.actions.generation_actions import generation_grass
 from main.actions.generation_actions import generation_herbivore
 from main.actions.generation_actions import generation_predator
-from main import move_creatures_action
+from main.actions.creatures_actions import move_creatures_action
+from main.actions.creatures_actions import action_eat_object
 
 
 class Simulation:
@@ -39,11 +40,20 @@ class Simulation:
 
         # Создаём объект класса actions и объект класса поиска пути
         self.move_creatures = move_creatures_action.MoveCreaturesAction(self.matrix)
+        self.eat_action = action_eat_object.ActionEatObject(self.matrix)
 
-        print("=====================")
-        self.move_creatures.perform()
-        self.renderer.print_map()
-        print('====================')
+        counter = 0
+        # Методы которые будут вызываться в процессе симуляции
+        while counter != 10:
+            self.eat_action.perform()
+            self.move_creatures.perform()
+            self.eat_action.perform()
+
+            print("=====================")
+            # self.gen_grass.dynamic_spawn()
+            self.renderer.print_map()
+            counter = counter + 1
+            print('====================')
 
     def information(self):
         """

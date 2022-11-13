@@ -1,4 +1,4 @@
-from main import paht_finding
+from main.actions.creatures_actions import paht_finding
 from main.actions import actions
 
 
@@ -50,12 +50,11 @@ class MoveCreaturesAction(actions.Actions):
         """
         # Список содержащий объекты координат
         path = path_list
-
         creatures = self.matrix.get_object(path[0].x, path[0].y)
         if len(path) > creatures.speed:
             self.matrix.add_object(creatures, path[creatures.speed - 1].x, path[creatures.speed - 1].y)
             self.matrix.delete_object(path[0].x, path[0].y)
-        else:
+        elif len(path) > 2:
             self.matrix.add_object(creatures, path[1].x, path[1].y)
             self.matrix.delete_object(path[0].x, path[0].y)
         print('===========')
