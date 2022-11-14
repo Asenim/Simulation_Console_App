@@ -37,7 +37,9 @@ class MoveCreaturesAction(actions.Actions):
                     path = paht_finding.PathFinder(matrix=self.matrix, hunter=creatures)
                     path_lists = path.path_finder()
                     if path_lists is not None and creatures not in moving_creatures:
-                        print(f'Готовый путь {creatures.sprite, creatures.speed}')
+                        print(f'Готовый путь {creatures.sprite}\n'
+                              f'Скорость существа - {creatures.speed}\n'
+                              f'Здоровье существа - {creatures.hit_point}')
                         for crd in path_lists:
                             print((crd.x, crd.y), end='; ')
                         print()

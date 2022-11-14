@@ -44,7 +44,7 @@ class Simulation:
 
         counter = 0
         # Методы которые будут вызываться в процессе симуляции
-        while counter != 10:
+        while counter != 20:
             self.eat_action.perform()
             self.move_creatures.perform()
             self.eat_action.perform()
