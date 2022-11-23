@@ -3,11 +3,11 @@
 Наследуется от Action.
 Есть базовые поля и методы класса.
 """
-from main.actions import actions
+from main.actions import action
 import random
 
 
-class Generate(actions.Actions):
+class Generate(action.Actions):
     def __init__(self, matrix):
         # Абстрактное количество генерируемых объектов которые необходимо сгенерировать
         self.object_quantity = None
@@ -91,5 +91,8 @@ class Generate(actions.Actions):
         Метод, который позволит создавать
         выбранные объекты если их недостаточно на карте
         """
+        self.count_current()
         if self.if_dynamic_spawn():
+            self.count_object = 0
             self.spawn()
+        self.count_object = 0

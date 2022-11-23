@@ -1,8 +1,8 @@
-from main.actions import actions
+from main.actions import action
 from main import coordinate
 
 
-class ActionEatObject(actions.Actions):
+class ActionEatObject(action.Actions):
     def __init__(self, matrix):
         """
         Класс для поедания и атаки искомых объектов
@@ -42,7 +42,7 @@ class ActionEatObject(actions.Actions):
         creature = hunting_object
         coordinated = coordinate.Coordinates(creature.x, creature.y)
         # Проверяем не выходим ли за поле
-        if (0 <= coordinated.x + crd_x < self.matrix.height) and (0 < coordinated.y + crd_y <= self.matrix.width):
+        if (0 <= coordinated.x + crd_x <= self.matrix.height) and (0 <= coordinated.y + crd_y <= self.matrix.width):
 
             # Проверяем не находятся ли объекты по этим координатам
             if not self.matrix.is_empty(coordinated.x + crd_x, coordinated.y + crd_y):

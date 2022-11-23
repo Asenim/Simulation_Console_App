@@ -1,8 +1,8 @@
-from main.actions.creatures_actions import paht_finding
-from main.actions import actions
+from main.actions.creatures_actions import path_finding
+from main.actions import action
 
 
-class MoveCreaturesAction(actions.Actions):
+class MoveCreaturesAction(action.Actions):
     def __init__(self, matrix):
         """
         Класс для перемещения существ по карте
@@ -34,15 +34,15 @@ class MoveCreaturesAction(actions.Actions):
                     creatures = self.matrix.get_object(i, j)
                     creatures.x = i
                     creatures.y = j
-                    path = paht_finding.PathFinder(matrix=self.matrix, hunter=creatures)
+                    path = path_finding.PathFinder(matrix=self.matrix, hunter=creatures)
                     path_lists = path.path_finder()
                     if path_lists is not None and creatures not in moving_creatures:
-                        print(f'Готовый путь {creatures.sprite}\n'
-                              f'Скорость существа - {creatures.speed}\n'
-                              f'Здоровье существа - {creatures.hit_point}')
-                        for crd in path_lists:
-                            print((crd.x, crd.y), end='; ')
-                        print()
+                        # print(f'Готовый путь {creatures.sprite}\n'
+                        #       f'Скорость существа - {creatures.speed}\n'
+                        #       f'Здоровье существа - {creatures.hit_point}')
+                        # for crd in path_lists:
+                        #     print((crd.x, crd.y), end='; ')
+                        # print()
                         self.__move_creature(path_lists)
                         moving_creatures.append(creatures)
 
@@ -59,4 +59,3 @@ class MoveCreaturesAction(actions.Actions):
         elif len(path) > 2:
             self.matrix.add_object(creatures, path[1].x, path[1].y)
             self.matrix.delete_object(path[0].x, path[0].y)
-        print('===========')

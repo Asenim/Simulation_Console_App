@@ -1,11 +1,13 @@
-from main.maps_and_render import map_class, render
-from main.actions.generation_actions import generation_tree
-from main.actions.generation_actions import generation_rock
-from main.actions.generation_actions import generation_grass
-from main.actions.generation_actions import generation_herbivore
-from main.actions.generation_actions import generation_predator
-from main.actions.creatures_actions import move_creatures_action
-from main.actions.creatures_actions import action_eat_object
+from maps_and_render import map_class
+from maps_and_render import render
+from actions.generation_actions import generation_tree
+from actions.generation_actions import generation_rock
+from actions.generation_actions import generation_grass
+from actions.generation_actions import generation_herbivore
+from actions.generation_actions import generation_predator
+from actions.creatures_actions import move_creatures_action
+from actions.creatures_actions import action_eat_object
+from time import sleep
 
 
 class Simulation:
@@ -13,6 +15,8 @@ class Simulation:
         # Принимаем значения
         self.height = height
         self.width = width
+        # Поле которое позволит нам конролировать цикл программы
+        self.run = None
 
         # Создаём матрицу и рендер
         self.matrix = map_class.Map(self.height, self.width)
@@ -45,15 +49,16 @@ class Simulation:
         counter = 0
         # Методы которые будут вызываться в процессе симуляции
         while counter != 20:
-            self.eat_action.perform()
-            self.move_creatures.perform()
-            self.eat_action.perform()
+            self.iterable_list_actions = [self.eat_action, self.move_creatures, self.eat_action, self.gen_grass]
+
+            for j in self.iterable_list_actions:
+                j.perform()
 
             print("=====================")
-            # self.gen_grass.dynamic_spawn()
             self.renderer.print_map()
+            print("=====================")
+            sleep(1)
             counter = counter + 1
-            print('====================')
 
     def information(self):
         """
