@@ -35,7 +35,10 @@ class Herbivore(creatures.Creatures):
             creature = matrix.get_object(coordinate.x, coordinate.y)
             if creature.sprite == 'Gs':
                 matrix.delete_object(coordinate.x, coordinate.y)
-                self.hit_point = self.hit_point + self.restore_hp_eat_grass
+                if self.hit_point < self.max_hit_point:
+                    self.hit_point = self.hit_point + self.restore_hp_eat_grass
+                else:
+                    self.hit_point = self.max_hit_point
 
     def reproduction(self):
         pass

@@ -65,6 +65,11 @@ class Map:
         coordinates = coordinate.Coordinates(x, y)
         del self.__dict_object[coordinates]
 
+    @staticmethod
+    def change_object_coordinates(creature, new_x, new_y):
+        creature.x = new_x
+        creature.y = new_y
+
     def map_size(self):
         """
         Метода возвращающий размер карты

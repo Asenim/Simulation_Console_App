@@ -30,6 +30,10 @@ class ActionEatObject(action.Actions):
                     self.__search_food(creature, 0, 1)
                     self.__search_food(creature, -1, 0)
                     self.__search_food(creature, 0, -1)
+                    # self.__search_food(creature, 1, 1)
+                    # self.__search_food(creature, 1, -1)
+                    # self.__search_food(creature, -1, 1)
+                    # self.__search_food(creature, -1, -1)
 
     def __search_food(self, hunting_object, crd_x, crd_y):
         """

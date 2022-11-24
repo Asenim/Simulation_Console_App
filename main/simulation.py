@@ -1,12 +1,13 @@
-from maps_and_render import map_class
-from maps_and_render import render
-from actions.generation_actions import generation_tree
-from actions.generation_actions import generation_rock
-from actions.generation_actions import generation_grass
-from actions.generation_actions import generation_herbivore
-from actions.generation_actions import generation_predator
-from actions.creatures_actions import move_creatures_action
-from actions.creatures_actions import action_eat_object
+from main.entity_object.animals.dynamic_object.herbivore import Herbivore
+from main.maps_and_render import map_class
+from main.maps_and_render import render
+from main.actions.generation_actions import generation_tree
+from main.actions.generation_actions import generation_rock
+from main.actions.generation_actions import generation_grass
+from main.actions.generation_actions import generation_herbivore
+from main.actions.generation_actions import generation_predator
+from main.actions.creatures_actions import move_creatures_action
+from main.actions.creatures_actions import action_eat_object
 from time import sleep
 
 
@@ -24,18 +25,18 @@ class Simulation:
         # Отрисовываем пустую матрицу
         self.renderer.print_map()
 
-        # Создаём объекты генерации
-        self.gen_tree = generation_tree.GenerationTree(self.matrix)
-        self.gen_rock = generation_rock.GenerationRock(self.matrix)
-        self.gen_grass = generation_grass.GenerationGrass(self.matrix)
-        self.gen_herbivore = generation_herbivore.GenerationHerbivore(self.matrix)
-        self.gen_predator = generation_predator.GenerationPredator(self.matrix)
-        # Помещаем их в список
-        self.list_actions = [self.gen_grass, self.gen_tree, self.gen_rock, self.gen_herbivore, self.gen_predator]
+        self.list_generation_action = [
+            generation_tree.GenerationTree(self.matrix),
+            generation_rock.GenerationRock(self.matrix),
+            generation_grass.GenerationGrass(self.matrix),
+            generation_herbivore.GenerationHerbivore(self.matrix),
+            generation_predator.GenerationPredator(self.matrix)
+
+        ]
 
         # Вызываем предварительную генерацию перед началом игры
-        for i in self.list_actions:
-            i.perform()
+        for pre_start_action in self.list_generation_action:
+            pre_start_action.perform()
 
         # Отрисовываем заполненную матрицу рендер
         print('---------------------')
@@ -43,51 +44,77 @@ class Simulation:
         print('----------------------')
 
         # Создаём объект класса actions и объект класса поиска пути
-        self.move_creatures = move_creatures_action.MoveCreaturesAction(self.matrix)
-        self.eat_action = action_eat_object.ActionEatObject(self.matrix)
+        # self.move_creatures = move_creatures_action.MoveCreaturesAction(self.matrix)
+        # self.eat_action = action_eat_object.ActionEatObject(self.matrix)
 
-        counter = 0
         # Методы которые будут вызываться в процессе симуляции
-        while counter != 20:
-            self.iterable_list_actions = [self.eat_action, self.move_creatures, self.eat_action, self.gen_grass]
+        while True:
+            self.iterable_list_action = [
+                move_creatures_action.MoveCreaturesAction(self.matrix),
+                action_eat_object.ActionEatObject(self.matrix),
+                generation_grass.GenerationGrass(self.matrix)
+            ]
 
-            for j in self.iterable_list_actions:
-                j.perform()
+            for actions_during_game in self.iterable_list_action:
+                actions_during_game.perform()
 
             print("=====================")
             self.renderer.print_map()
             print("=====================")
             sleep(1)
-            counter = counter + 1
 
-    def information(self):
+            # В Условии должно быть not
+            if not self.stops_the_loop():
+                break
+
+    def stops_the_loop(self):
         """
-        Временный метод показывающий
-        количество всех объектов на матрице
+        Счетчик для условия остановки нашего цикла While.
+        На данный момент условие остановки - это отсутствие
+            травоядных на карте.
+        :return: Возвращает True или False
         """
-        # Словарь с объектами матрицы
-        __dict_objects_info = {}
+        counter_herbivore = 0
 
-        # Алгоритм заполнение словаря
-        for action in self.list_actions:
-            if action.object.sprite not in __dict_objects_info:
-                __dict_objects_info[action.object.sprite] = 0
+        for i in range(self.matrix.height):
+            for j in range(self.matrix.width):
+                all_object = self.matrix.get_object(i, j)
+                if isinstance(all_object, Herbivore):
+                    counter_herbivore = counter_herbivore + 1
 
-        print()
-        # Подсчёт объектов на карте для метода information
-        for x in range(self.matrix.height):
-            for y in range(self.matrix.width):
-                for key in __dict_objects_info:
-                    if self.matrix.is_empty(x, y):
-                        pass
-                    elif key in self.matrix.get_object(x, y).sprite:
-                        __dict_objects_info[key] = __dict_objects_info[key] + 1
+        if counter_herbivore > 0:
+            return True
+        else:
+            return False
 
-        # Вывод количества объектов на матрице
-        for key in __dict_objects_info:
-            print(f'{key} = {__dict_objects_info[key]}')
+    # def information(self):
+    #     """
+    #     Временный метод показывающий
+    #     количество всех объектов на матрице
+    #     """
+    #     # Словарь с объектами матрицы
+    #     __dict_objects_info = {}
+    #
+    #     # Алгоритм заполнение словаря
+    #     for action in self.list_generation_action:
+    #         if action.object.sprite not in __dict_objects_info:
+    #             __dict_objects_info[action.object.sprite] = 0
+    #
+    #     print()
+    #     # Подсчёт объектов на карте для метода information
+    #     for x in range(self.matrix.height):
+    #         for y in range(self.matrix.width):
+    #             for key in __dict_objects_info:
+    #                 if self.matrix.is_empty(x, y):
+    #                     pass
+    #                 elif key in self.matrix.get_object(x, y).sprite:
+    #                     __dict_objects_info[key] = __dict_objects_info[key] + 1
+    #
+    #     # Вывод количества объектов на матрице
+    #     for key in __dict_objects_info:
+    #         print(f'{key} = {__dict_objects_info[key]}')
 
 
 if __name__ == '__main__':
     sim = Simulation(5, 5)
-    sim.information()
+    # sim.information()

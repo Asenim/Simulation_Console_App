@@ -1,13 +1,15 @@
 from collections import deque
 from main import coordinate
+from main.entity_object.animals.dynamic_object.herbivore import Herbivore
+from main.entity_object.animals.dynamic_object.predator import Predator
 
 
 class PathFinder:
-    def __init__(self, hunter=None, matrix=None):
+    def __init__(self, creature=None, matrix=None):
         """
         Общий класс поиска пути.
         На вход принимает параметры:
-        :param hunter: класс, который будет охотиться.
+        :param creature: класс, который будет охотиться.
         :param matrix: объект класса карты с которым будем работать
 
         P.S. Все методы где описана "Опция" - являются расширяемыми и
@@ -17,25 +19,21 @@ class PathFinder:
         self.__hunter = None
         self.__victim = None
         # Инициализируем очередь, множество и коллекцию для посещенных объектов
-        self.__queues = deque()
-        self.__sets = set()
-
-        # Резервируем начало и конец
-        self.__start_point_save = None
-        self.__end_point_save = None
+        self.__queue_of_pass = deque()
+        self.__set_of_visited = set()
 
         # Объявляем поля класса
-        if hunter.sprite == 'Hrb':
-            self.__hunter = hunter
+        # if hunter.sprite == 'Hrb':
+        if isinstance(creature, Herbivore):
+            self.__hunter = creature
             self.__victim = 'Gs'
-        elif hunter.sprite == 'Prd':
-            self.__hunter = hunter
+        elif isinstance(creature, Predator):
+            self.__hunter = creature
             self.__victim = 'Hrb'
 
-        if self.__hunter is not None and self.__victim is not None:
-            coordinated = coordinate.Coordinates(self.__hunter.x, self.__hunter.y)
-            self.__queues.appendleft([coordinated])
-            self.__start_point_save = coordinated
+        # if self.__hunter is not None and self.__victim is not None:
+        coordinated = coordinate.Coordinates(self.__hunter.x, self.__hunter.y)
+        self.__queue_of_pass.append([coordinated])
 
     def __filling_queue(self, path_list, crd_1, crd_2):
         """
@@ -55,19 +53,19 @@ class PathFinder:
             if self.matrix.is_empty(coordinates.x + crd_1, coordinates.y + crd_2):
                 coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
 
-                if coordinated not in self.__sets:
+                if coordinated not in self.__set_of_visited:
                     new_path_list = path_list.copy()
                     new_path_list.append(coordinated)
-                    self.__queues.append(new_path_list)
+                    self.__queue_of_pass.append(new_path_list)
 
             # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
             elif self.matrix.get_object(coordinates.x + crd_1, coordinates.y + crd_2).sprite == self.__victim:
                 coordinated = coordinate.Coordinates(coordinates.x + crd_1, coordinates.y + crd_2)
                 new_path_list = path_list.copy()
                 new_path_list.append(coordinated)
-                self.__queues.append(new_path_list)
+                self.__queue_of_pass.append(new_path_list)
 
-    def path_finder(self):
+    def find_path(self):
         """
         Алгоритм поиска пути в ширину.
         Метод возвращает массив с путем или заканчивает поиск если искомый объект не найден.
@@ -78,8 +76,8 @@ class PathFinder:
         # Работает пока очередь не пуста или не выполнено условие остановки
         while True:
             # Забираем координаты стартовой точки
-            if len(self.__queues) > 0:
-                path_list = self.__queues.popleft()
+            if len(self.__queue_of_pass) > 0:
+                path_list = self.__queue_of_pass.popleft()
 
                 # Заполняем очередь
                 self.__filling_queue(path_list, +1, 0)
@@ -87,15 +85,13 @@ class PathFinder:
                 self.__filling_queue(path_list, 0, +1)
                 self.__filling_queue(path_list, 0, -1)
 
-                self.__sets.add(path_list[-1])
+                self.__set_of_visited.add(path_list[-1])
 
                 # Останавливаем цикл и возвращаем искомый путь для дальнейшего пользования
                 if not self.matrix.is_empty(path_list[-1].x, path_list[-1].y):
                     if self.matrix.get_object(path_list[-1].x, path_list[-1].y).sprite == self.__victim:
-                        self.__end_point_save = path_list[-1]
 
-                        # Возвращаем путь
                         return path_list
 
-            elif len(self.__queues) == 0:
+            elif len(self.__queue_of_pass) == 0:
                 return None
