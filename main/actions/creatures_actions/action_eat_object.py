@@ -1,5 +1,8 @@
 from main.actions import action
 from main import coordinate
+from main.entity_object.animals.dynamic_object.herbivore import Herbivore
+from main.entity_object.animals.dynamic_object.predator import Predator
+from main.entity_object.static_objects.grass import Grass
 
 
 class ActionEatObject(action.Actions):
@@ -22,28 +25,31 @@ class ActionEatObject(action.Actions):
         Хищник - охотится на травоядное
 
         """
+        creatures_objects_lists = []
+
         for i in range(self.matrix.height):
             for j in range(self.matrix.width):
                 if not self.matrix.is_empty(i, j):
-                    creature = self.matrix.get_object(i, j)
-                    self.__search_food(creature, 1, 0)
-                    self.__search_food(creature, 0, 1)
-                    self.__search_food(creature, -1, 0)
-                    self.__search_food(creature, 0, -1)
-                    # self.__search_food(creature, 1, 1)
-                    # self.__search_food(creature, 1, -1)
-                    # self.__search_food(creature, -1, 1)
-                    # self.__search_food(creature, -1, -1)
+                    all_object = self.matrix.get_object(i, j)
+                    if isinstance(all_object, (Herbivore, Predator)):
+                        creatures_objects_lists.append(all_object)
 
-    def __search_food(self, hunting_object, crd_x, crd_y):
+        coordinate_shift_list = [[+1, 0], [-1, 0], [0, +1], [0, -1],
+                                 [+1, +1], [+1, -1], [-1, +1], [-1, -1]]
+
+        for creature_object in creatures_objects_lists:
+            for coordinate_shift in coordinate_shift_list:
+                self.__search_food(creature_object, coordinate_shift[0], coordinate_shift[1])
+
+    def __search_food(self, creature_object, crd_x, crd_y):
         """
         Метод который будет смотреть
         вокруг объекта на наличие еды
-        :param hunting_object: объект охоты
+        :param creature_object: объект охоты
         :param crd_x: координата принимающая сдвиг по x
         :param crd_y: координата принимающая сдвиг по у
         """
-        creature = hunting_object
+        creature = creature_object
         coordinated = coordinate.Coordinates(creature.x, creature.y)
         # Проверяем не выходим ли за поле
         if (0 <= coordinated.x + crd_x <= self.matrix.height) and (0 <= coordinated.y + crd_y <= self.matrix.width):
@@ -51,7 +57,10 @@ class ActionEatObject(action.Actions):
             # Проверяем не находятся ли объекты по этим координатам
             if not self.matrix.is_empty(coordinated.x + crd_x, coordinated.y + crd_y):
                 coordinated = coordinate.Coordinates(coordinated.x + crd_x, coordinated.y + crd_y)
-                if creature.sprite == 'Hrb':
+
+                if isinstance(creature, Herbivore) and isinstance(
+                        self.matrix.get_object(coordinated.x, coordinated.y), Grass):
                     creature.eat_grass(self.matrix, coordinated)
-                elif creature.sprite == 'Prd':
+                elif isinstance(creature, Predator) and isinstance(
+                        self.matrix.get_object(coordinated.x, coordinated.y), Herbivore):
                     creature.attack(self.matrix, coordinated)

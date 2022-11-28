@@ -35,7 +35,8 @@ class PathFinder:
         while True:
             if len(self.__queue_of_pass) > 0:
                 coordinate_list = self.__queue_of_pass.popleft()
-                coordinate_shift_list = [[+1, 0], [-1, 0], [0, +1], [0, -1]]
+                coordinate_shift_list = [[+1, 0], [-1, 0], [0, +1], [0, -1],
+                                         [+1, +1], [+1, -1], [-1, +1], [-1, -1]]
 
                 for coordinate_shift in coordinate_shift_list:
                     self.__filling_queue(coordinate_list, coordinate_shift[0], coordinate_shift[1])

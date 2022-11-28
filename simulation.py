@@ -1,3 +1,5 @@
+import os
+
 from main.entity_object.animals.dynamic_object.herbivore import Herbivore
 from main.maps_and_render import map_class
 from main.maps_and_render import render
@@ -23,7 +25,7 @@ class Simulation:
         self.matrix = map_class.Map(self.height, self.width)
         self.renderer = render.Render(self.matrix)
         # Отрисовываем пустую матрицу
-        self.renderer.print_map()
+        # self.renderer.print_map()
 
         self.list_generation_action = [
             generation_tree.GenerationTree(self.matrix),
@@ -42,10 +44,8 @@ class Simulation:
         print('---------------------')
         self.renderer.print_map()
         print('----------------------')
-
-        # Создаём объект класса actions и объект класса поиска пути
-        # self.move_creatures = move_creatures_action.MoveCreaturesAction(self.matrix)
-        # self.eat_action = action_eat_object.ActionEatObject(self.matrix)
+        sleep(1)
+        os.system('cls')
 
         # Методы которые будут вызываться в процессе симуляции
         while True:
@@ -62,9 +62,11 @@ class Simulation:
             self.renderer.print_map()
             print("=====================")
             sleep(1)
+            os.system('cls')
 
             # В Условии должно быть not
             if not self.stops_the_loop():
+                self.renderer.print_map()
                 break
 
     def stops_the_loop(self):
@@ -87,34 +89,6 @@ class Simulation:
         else:
             return False
 
-    # def information(self):
-    #     """
-    #     Временный метод показывающий
-    #     количество всех объектов на матрице
-    #     """
-    #     # Словарь с объектами матрицы
-    #     __dict_objects_info = {}
-    #
-    #     # Алгоритм заполнение словаря
-    #     for action in self.list_generation_action:
-    #         if action.object.sprite not in __dict_objects_info:
-    #             __dict_objects_info[action.object.sprite] = 0
-    #
-    #     print()
-    #     # Подсчёт объектов на карте для метода information
-    #     for x in range(self.matrix.height):
-    #         for y in range(self.matrix.width):
-    #             for key in __dict_objects_info:
-    #                 if self.matrix.is_empty(x, y):
-    #                     pass
-    #                 elif key in self.matrix.get_object(x, y).sprite:
-    #                     __dict_objects_info[key] = __dict_objects_info[key] + 1
-    #
-    #     # Вывод количества объектов на матрице
-    #     for key in __dict_objects_info:
-    #         print(f'{key} = {__dict_objects_info[key]}')
-
 
 if __name__ == '__main__':
-    sim = Simulation(5, 5)
-    # sim.information()
+    sim = Simulation(10, 10)

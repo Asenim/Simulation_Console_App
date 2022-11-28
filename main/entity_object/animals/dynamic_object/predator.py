@@ -24,9 +24,6 @@ class Predator(creatures.Creatures):
         self.attack_power = attack_power
         self.sprite = 'Prd'
 
-    def make_move(self):
-        pass
-
     def attack(self, maps, coordinate_object):
         """
         Метод позволяет атаковать травоядное
@@ -40,12 +37,7 @@ class Predator(creatures.Creatures):
         coordinate = coordinate_object
         if not matrix.is_empty(coordinate.x, coordinate.y):
             creature = matrix.get_object(coordinate.x, coordinate.y)
-            if creature.sprite == 'Hrb':
-                if creature.hit_point > 0:
-                    creature.hit_point = creature.hit_point - self.attack_power
-                elif creature.hit_point <= 0:
-                    matrix.delete_object(coordinate.x, creature.y)
-                    self.hit_point = self.hit_point + self.restore_hp_successful_hunt
-
-    def reproduction(self):
-        pass
+            creature.hit_point = creature.hit_point - self.attack_power
+            if creature.hit_point <= 0:
+                matrix.delete_object(coordinate.x, creature.y)
+                self.hit_point = self.hit_point + self.restore_hp_successful_hunt

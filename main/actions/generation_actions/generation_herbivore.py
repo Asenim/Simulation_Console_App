@@ -40,16 +40,16 @@ class GenerationHerbivore(generate.Generate):
         # Счётчик травоядных
         self.count_object = 2
         # Объект для корректной работы словаря в information и цикла в generate
-        self.object = herbivore.Herbivore(speed=2, hit_point=5, max_hit_point=10,
+        self.object = herbivore.Herbivore(speed=2, hit_point=5, max_hit_point=8,
                                           gender=random.choice(['male', 'female']),
                                           restore_hp_eat_grass=random.randint(1, 3),
                                           x=self.matrix.height, y=self.matrix.width)
 
     def spawn_object(self, num_1, num_2):
         # Размещаем объекты в карте
-        self.matrix.add_object(herbivore.Herbivore(speed=2, hit_point=5, max_hit_point=10,
+        self.matrix.add_object(herbivore.Herbivore(speed=2, hit_point=5, max_hit_point=8,
                                                    gender=random.choice(['male', 'female']),
-                                                   restore_hp_eat_grass=random.randint(1, 3),
+                                                   restore_hp_eat_grass=random.randint(1, 2),
                                                    x=num_1, y=num_2), num_1, num_2)
         # После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
         self.count_object = 0

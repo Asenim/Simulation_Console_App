@@ -23,22 +23,22 @@ class MoveCreaturesAction(action.Actions):
         Затем итерируется по списку существ и создаёт для каждого существа путь
         После создания пути начинает двигать существ
         """
-        iterable_creature_coordinates_list = []
+        iterable_creatures_objects_list = []
 
         for i in range(self.matrix.height):
             for j in range(self.matrix.width):
                 checked_object = self.matrix.get_object(i, j)
 
                 if isinstance(checked_object, (Herbivore, Predator)):
-                    iterable_creature_coordinates_list.append(checked_object)
+                    iterable_creatures_objects_list.append(checked_object)
 
-        for iterable_creature in iterable_creature_coordinates_list:
+        for iterable_creature_oject in iterable_creatures_objects_list:
 
-            if isinstance(iterable_creature, Herbivore):
-                self.__creates_a_path(self.matrix, iterable_creature, Grass)
+            if isinstance(iterable_creature_oject, Herbivore):
+                self.__creates_a_path(self.matrix, iterable_creature_oject, Grass)
 
-            elif isinstance(iterable_creature, Predator):
-                self.__creates_a_path(self.matrix, iterable_creature, Herbivore)
+            elif isinstance(iterable_creature_oject, Predator):
+                self.__creates_a_path(self.matrix, iterable_creature_oject, Herbivore)
 
     def __creates_a_path(self, matrix, creature, food):
         """

@@ -17,9 +17,3 @@ class Creatures(entity.Entity):
         self.hit_point = hit_point
         self.max_hit_point = max_hit_point
         self.gender = gender
-
-    def make_move(self):
-        """
-        Метод который позволит существам сделать ход
-        """
-        pass

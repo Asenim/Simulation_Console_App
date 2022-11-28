@@ -19,9 +19,6 @@ class Herbivore(creatures.Creatures):
         self.restore_hp_eat_grass = restore_hp_eat_grass
         self.sprite = 'Hrb'
 
-    def make_move(self):
-        pass
-
     def eat_grass(self, maps, coordinate_object):
         """
         Метод позволяет кушать траву, удалять объект
@@ -32,13 +29,8 @@ class Herbivore(creatures.Creatures):
         matrix = maps
         coordinate = coordinate_object
         if not matrix.is_empty(coordinate.x, coordinate.y):
-            creature = matrix.get_object(coordinate.x, coordinate.y)
-            if creature.sprite == 'Gs':
-                matrix.delete_object(coordinate.x, coordinate.y)
-                if self.hit_point < self.max_hit_point:
-                    self.hit_point = self.hit_point + self.restore_hp_eat_grass
-                else:
-                    self.hit_point = self.max_hit_point
-
-    def reproduction(self):
-        pass
+            matrix.delete_object(coordinate.x, coordinate.y)
+            if self.hit_point < self.max_hit_point:
+                self.hit_point = self.hit_point + self.restore_hp_eat_grass
+            else:
+                self.hit_point = self.max_hit_point
