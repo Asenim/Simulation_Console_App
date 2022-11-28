@@ -50,15 +50,15 @@ class MoveCreaturesAction(action.Actions):
         path = PathFinder(matrix=matrix, creature=creature, food=food)
         path_lists = path.find_path()
 
-        # Вывод в консоль - подлежит удалению
-        print(f'Готовый путь {creature.sprite}\n'
-              f'Скорость существа - {creature.speed}\n'
-              f'Здоровье существа - {creature.hit_point}')
+        # # Вывод в консоль - ества - {creature.speed}\n'
+        #       f'Здоровье существа - {creatureподлежит удалению
+        #         # print(f'Готовый путь {creature.sprite}\n'
+        #         #       f'Скорость сущ.hit_point}')
 
         if path_lists is not None:
-            for crd in path_lists:
-                print((crd.x, crd.y), end='; ')
-            print()
+            # for crd in path_lists:
+            #     print((crd.x, crd.y), end='; ')
+            # print()
             self.__move_creature(path_lists)
         else:
             print('Пути нет')

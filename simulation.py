@@ -1,5 +1,4 @@
 import os
-
 from main.entity_object.animals.dynamic_object.herbivore import Herbivore
 from main.maps_and_render import map_class
 from main.maps_and_render import render
@@ -42,6 +41,7 @@ class Simulation:
 
         # Отрисовываем заполненную матрицу рендер
         print('---------------------')
+        self.renderer.displays_statistics()
         self.renderer.print_map()
         print('----------------------')
         sleep(1)
@@ -49,16 +49,17 @@ class Simulation:
 
         # Методы которые будут вызываться в процессе симуляции
         while True:
-            self.iterable_list_action = [
+            iterable_list_action = [
                 move_creatures_action.MoveCreaturesAction(self.matrix),
                 action_eat_object.ActionEatObject(self.matrix),
                 generation_grass.GenerationGrass(self.matrix)
             ]
 
-            for actions_during_game in self.iterable_list_action:
+            for actions_during_game in iterable_list_action:
                 actions_during_game.perform()
 
             print("=====================")
+            self.renderer.displays_statistics()
             self.renderer.print_map()
             print("=====================")
             sleep(1)
@@ -66,6 +67,7 @@ class Simulation:
 
             # В Условии должно быть not
             if not self.stops_the_loop():
+                self.renderer.displays_statistics()
                 self.renderer.print_map()
                 break
 
