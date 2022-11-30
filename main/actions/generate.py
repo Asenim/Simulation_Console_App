@@ -1,21 +1,15 @@
-"""
-Промежуточный класс.
-Наследуется от Action.
-Есть базовые поля и методы класса.
-"""
-from main.actions import action
+from main.actions.action import Actions
 import random
 
 
-class Generate(action.Actions):
+class Generate(Actions):
     def __init__(self, matrix):
+        """
+        Промежуточный класс, от этого класса наследуется вся генерация объектов
+        :param matrix: Принимаем объект карты
+        """
         # Абстрактное количество генерируемых объектов которые необходимо сгенерировать
         self.object_quantity = None
-        # Абстрактный счётчик сгенерированных объектов
-        self.count_object = None
-        # Абстрактный объект
-        self.object = None
-        # Матрица
         self.matrix = matrix
 
         # Количество клеток которое есть в матрице
@@ -28,16 +22,18 @@ class Generate(action.Actions):
         """
         self.spawn()
 
-    def count_current(self):
+    def spawn(self):
         """
-        Метод для подсчёта объектов на матрице
+        Метод в котором будет реализован алгоритм
+        генерации координат случайного расположения
+        объектов на карте.
         """
-        for x in range(self.matrix.height+2):
-            for y in range(self.matrix.width+2):
-                if self.matrix.is_empty(x, y):
-                    pass
-                elif self.matrix.get_object(x, y).sprite == self.object.sprite:
-                    self.count_object = self.count_object + 1
+        # Основной цикл Генерации
+        for i in range(self.object_quantity):
+            # Генерация случайных индексов матрицы
+            num_1, num_2 = self.random_coordinates()
+            # Алгоритм генерации самих объектов на матрице
+            self.spawn_object(num_1, num_2)
 
     def random_coordinates(self):
         """
@@ -62,37 +58,3 @@ class Generate(action.Actions):
         :param num_2: координата y расположения объекта
         """
         pass
-
-    def if_dynamic_spawn(self):
-        """
-        Метод - условие с помощью которого
-        мы будем проверять необходимую границу
-        для создания дополнительных объектов
-        """
-        return self.count_object < (self.object_quantity//2)
-
-    def spawn(self):
-        """
-        Метод в котором будет реализован алгоритм
-        генерации координат случайного расположения
-        объектов на карте.
-        """
-        # Подсчёт количества объектов на матрице
-        self.count_current()
-        # Основной цикл Генерации
-        for i in range(self.object_quantity):
-            # Генерация случайных индексов матрицы
-            num_1, num_2 = self.random_coordinates()
-            # Алгоритм генерации самих объектов на матрице
-            self.spawn_object(num_1, num_2)
-
-    def dynamic_spawn(self):
-        """
-        Метод, который позволит создавать
-        выбранные объекты если их недостаточно на карте
-        """
-        self.count_current()
-        if self.if_dynamic_spawn():
-            self.count_object = 0
-            self.spawn()
-        self.count_object = 0

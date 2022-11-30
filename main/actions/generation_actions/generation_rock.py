@@ -1,19 +1,13 @@
-from main.actions import generate
-from main.entity_object.static_objects import rock
+from main.actions.generate import Generate
+from main.entity_object.static_objects.rock import Rock
 
 
-class GenerationRock(generate.Generate):
+class GenerationRock(Generate):
     def __init__(self, matrix):
         super().__init__(matrix)
         # Необходимое количество камня на карте
         self.object_quantity = int(self.matrix_cells * 0.08)
-        # Счётчик камня
-        self.count_object = 0
-        # Объект для подсчёта в information и generate
-        self.object = rock.Rock(self.matrix.height, self.matrix.width)
 
     def spawn_object(self, num_1, num_2):
         # Размещаем объекты в карте
-        self.matrix.add_object(rock.Rock(num_1, num_2), num_1, num_2)
-        # После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
-        self.count_object = 0
+        self.matrix.add_object(Rock(num_1, num_2), num_1, num_2)

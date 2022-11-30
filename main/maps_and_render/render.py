@@ -1,7 +1,3 @@
-"""
-Класс, который вызывает методы генерации
-и рисует нашу карту.
-"""
 from main.entity_object.animals.dynamic_object.herbivore import Herbivore
 from main.entity_object.animals.dynamic_object.predator import Predator
 
@@ -45,13 +41,18 @@ class Render:
             print()
 
     def displays_statistics(self):
+        """
+        Метод отрисовки статуса существ
+        """
         list_of_creatures = []
 
+        # Ищем существ и заполняем список ими
         for x in range(self.matrix.height+2):
             for y in range(self.matrix.width+2):
                 if isinstance(self.matrix.get_object(x, y), (Herbivore, Predator)):
                     list_of_creatures.append(self.matrix.get_object(x, y))
 
+        # Итерируемся по существам и выводим их характеристики
         for creature_iteration in list_of_creatures:
             if isinstance(creature_iteration, Predator):
                 print(f'Хищник - {creature_iteration.sprite}; '
