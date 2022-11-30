@@ -32,8 +32,8 @@ class Generate(action.Actions):
         """
         Метод для подсчёта объектов на матрице
         """
-        for x in range(self.matrix.height):
-            for y in range(self.matrix.width):
+        for x in range(self.matrix.height+2):
+            for y in range(self.matrix.width+2):
                 if self.matrix.is_empty(x, y):
                     pass
                 elif self.matrix.get_object(x, y).sprite == self.object.sprite:
@@ -46,8 +46,8 @@ class Generate(action.Actions):
         :return x, y - возвращает два числа.
         """
         while True:
-            x = random.randint(0, self.matrix.height - 1)
-            y = random.randint(0, self.matrix.width - 1)
+            x = random.randint(1, self.matrix.height)
+            y = random.randint(1, self.matrix.width)
             if self.matrix.is_empty(x, y):
                 return x, y
 

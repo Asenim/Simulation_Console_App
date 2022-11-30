@@ -9,9 +9,6 @@ class PathFinder:
         На вход принимает параметры:
         :param creature: класс, который будет охотиться.
         :param matrix: объект класса карты с которым будем работать
-
-        P.S. Все методы где описана "Опция" - являются расширяемыми и
-        дополняемыми после обсуждения и одобрения.
         """
         self.matrix = matrix
         self.__creature = creature
@@ -62,8 +59,8 @@ class PathFinder:
         current_position_coordinate = path_list[-1]
 
         # Условие выхода за границы поля
-        if (0 <= current_position_coordinate.x + crd_1 < self.matrix.height) and (
-                0 <= current_position_coordinate.y + crd_2 < self.matrix.width):
+        if (0 < current_position_coordinate.x + crd_1 < self.matrix.height+1) and (
+                0 < current_position_coordinate.y + crd_2 < self.matrix.width+1):
 
             # Проверяем не находятся ли объекты по этим координатам
             if self.matrix.is_empty(current_position_coordinate.x + crd_1, current_position_coordinate.y + crd_2):

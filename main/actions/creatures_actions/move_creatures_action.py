@@ -25,8 +25,8 @@ class MoveCreaturesAction(action.Actions):
         """
         iterable_creatures_objects_list = []
 
-        for i in range(self.matrix.height):
-            for j in range(self.matrix.width):
+        for i in range(self.matrix.height+2):
+            for j in range(self.matrix.width+2):
                 checked_object = self.matrix.get_object(i, j)
 
                 if isinstance(checked_object, (Herbivore, Predator)):
@@ -50,15 +50,7 @@ class MoveCreaturesAction(action.Actions):
         path = PathFinder(matrix=matrix, creature=creature, food=food)
         path_lists = path.find_path()
 
-        # # Вывод в консоль - ества - {creature.speed}\n'
-        #       f'Здоровье существа - {creatureподлежит удалению
-        #         # print(f'Готовый путь {creature.sprite}\n'
-        #         #       f'Скорость сущ.hit_point}')
-
         if path_lists is not None:
-            # for crd in path_lists:
-            #     print((crd.x, crd.y), end='; ')
-            # print()
             self.__move_creature(path_lists)
         else:
             print('Пути нет')

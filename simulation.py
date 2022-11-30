@@ -23,8 +23,6 @@ class Simulation:
         # Создаём матрицу и рендер
         self.matrix = map_class.Map(self.height, self.width)
         self.renderer = render.Render(self.matrix)
-        # Отрисовываем пустую матрицу
-        # self.renderer.print_map()
 
         self.list_generation_action = [
             generation_tree.GenerationTree(self.matrix),
@@ -40,10 +38,9 @@ class Simulation:
             pre_start_action.perform()
 
         # Отрисовываем заполненную матрицу рендер
-        print('---------------------')
+        os.system('cls')
         self.renderer.displays_statistics()
         self.renderer.print_map()
-        print('----------------------')
         sleep(1)
         os.system('cls')
 
@@ -58,10 +55,8 @@ class Simulation:
             for actions_during_game in iterable_list_action:
                 actions_during_game.perform()
 
-            print("=====================")
             self.renderer.displays_statistics()
             self.renderer.print_map()
-            print("=====================")
             sleep(1)
             os.system('cls')
 
@@ -80,8 +75,8 @@ class Simulation:
         """
         counter_herbivore = 0
 
-        for i in range(self.matrix.height):
-            for j in range(self.matrix.width):
+        for i in range(self.matrix.height+2):
+            for j in range(self.matrix.width+2):
                 all_object = self.matrix.get_object(i, j)
                 if isinstance(all_object, Herbivore):
                     counter_herbivore = counter_herbivore + 1
@@ -93,4 +88,4 @@ class Simulation:
 
 
 if __name__ == '__main__':
-    sim = Simulation(10, 10)
+    sim = Simulation(5, 5)

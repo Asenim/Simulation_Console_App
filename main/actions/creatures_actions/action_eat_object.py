@@ -27,8 +27,8 @@ class ActionEatObject(action.Actions):
         """
         creatures_objects_lists = []
 
-        for i in range(self.matrix.height):
-            for j in range(self.matrix.width):
+        for i in range(self.matrix.height+2):
+            for j in range(self.matrix.width+2):
                 if not self.matrix.is_empty(i, j):
                     all_object = self.matrix.get_object(i, j)
                     if isinstance(all_object, (Herbivore, Predator)):
@@ -52,7 +52,7 @@ class ActionEatObject(action.Actions):
         creature = creature_object
         coordinated = coordinate.Coordinates(creature.x, creature.y)
         # Проверяем не выходим ли за поле
-        if (0 <= coordinated.x + crd_x <= self.matrix.height) and (0 <= coordinated.y + crd_y <= self.matrix.width):
+        if (0 <= coordinated.x + crd_x < self.matrix.height+1) and (0 <= coordinated.y + crd_y < self.matrix.width+1):
 
             # Проверяем не находятся ли объекты по этим координатам
             if not self.matrix.is_empty(coordinated.x + crd_x, coordinated.y + crd_y):
