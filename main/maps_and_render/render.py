@@ -9,7 +9,7 @@ class Render:
         :param matrix: Принимаем на вход объект карты
         """
         # Принимаем параметры
-        self.matrix = matrix
+        self.__matrix = matrix
 
     def print_map(self):
         """
@@ -19,38 +19,41 @@ class Render:
         будет изменить границы в следующих классах: (Класс: Методы)
             simulation: stops_the_loop
             render: displays_statistics
-            generate: count_current, random_coordinates
+            generate: random_coordinates
+            generation_grass: count_current
             path_finding: __filling_queue
             move_creatures_action: __path_creatures
             action_eat_object: __search_hunter, __search_food
         """
         # Основной алгоритм отрисовки
-        for x in range(self.matrix.height+2):
-            for y in range(self.matrix.width+2):
-                if self.matrix.is_empty(x, y):
-                    if x == 0 or x == self.matrix.height+1:
+        for x in range(self.__matrix.height + 2):
+            for y in range(self.__matrix.width + 2):
+                if self.__matrix.is_empty(x, y):
+                    if x == 0 or x == self.__matrix.height+1:
                         item = '==='
-                    elif y == 0 or y == self.matrix.width+1:
+                    elif y == 0 or y == self.__matrix.width+1:
                         item = '||'
                     else:
                         item = ' '
                 else:
-                    item = self.matrix.get_object(x, y).sprite
+                    item = self.__matrix.get_object(x, y).sprite
 
                 print(str(item).ljust(3), end=' ')
             print()
 
     def displays_statistics(self):
         """
-        Метод отрисовки статуса существ
+        Метод отрисовки описания названия объектов и статуса существ
         """
+        self.__displays_information()
+
         list_of_creatures = []
 
         # Ищем существ и заполняем список ими
-        for x in range(self.matrix.height+2):
-            for y in range(self.matrix.width+2):
-                if isinstance(self.matrix.get_object(x, y), (Herbivore, Predator)):
-                    list_of_creatures.append(self.matrix.get_object(x, y))
+        for x in range(self.__matrix.height + 2):
+            for y in range(self.__matrix.width + 2):
+                if isinstance(self.__matrix.get_object(x, y), (Herbivore, Predator)):
+                    list_of_creatures.append(self.__matrix.get_object(x, y))
 
         # Итерируемся по существам и выводим их характеристики
         for creature_iteration in list_of_creatures:
@@ -64,3 +67,20 @@ class Render:
                       f'Скорость = {creature_iteration.speed}; '
                       f'Здоровье - {creature_iteration.hit_point}; '
                       f'Регенерация - {creature_iteration.restore_hp_eat_grass}')
+
+    @staticmethod
+    def __displays_information():
+        """
+        Метод для отрисовки глоссария объектов на карте
+        """
+        sprite_dictionary = {
+            'Prd': 'Хищник',
+            'Hrb': 'Травоядное',
+            'Gs': 'Трава',
+            'Tr': 'Дерево',
+            'Rk': 'Камень'
+        }
+
+        for sprite, description in sprite_dictionary.items():
+            print(sprite+' - '+description)
+        print()

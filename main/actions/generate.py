@@ -9,7 +9,7 @@ class Generate(Actions):
         :param matrix: Принимаем объект карты
         """
         # Абстрактное количество генерируемых объектов которые необходимо сгенерировать
-        self.object_quantity = None
+        self._object_quantity = None
         self.matrix = matrix
 
         # Количество клеток которое есть в матрице
@@ -29,7 +29,7 @@ class Generate(Actions):
         объектов на карте.
         """
         # Основной цикл Генерации
-        for i in range(self.object_quantity):
+        for i in range(self._object_quantity):
             # Генерация случайных индексов матрицы
             num_1, num_2 = self.random_coordinates()
             # Алгоритм генерации самих объектов на матрице
@@ -39,7 +39,9 @@ class Generate(Actions):
         """
         Метод позволяющий генерировать
         случайные координаты для наших объектов.
-        :return x, y - возвращает два числа.
+        Размещение объектов начинается с левой границы +1,
+        заканчивается по ширине и высоте карты
+        :return x, y - возвращает два числа
         """
         while True:
             x = random.randint(1, self.matrix.height)

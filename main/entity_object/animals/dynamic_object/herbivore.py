@@ -1,7 +1,7 @@
-from main.entity_object.animals import creatures
+from main.entity_object.animals.creatures import Creatures
 
 
-class Herbivore(creatures.Creatures):
+class Herbivore(Creatures):
     def __init__(self, speed, hit_point, max_hit_point,
                  gender, restore_hp_eat_grass, x, y):
         """

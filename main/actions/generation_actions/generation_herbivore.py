@@ -7,7 +7,7 @@ class GenerationHerbivore(Generate):
     def __init__(self, matrix):
         super().__init__(matrix)
         # Количество травоядных
-        self.object_quantity = 1
+        self._object_quantity = 1
 
     def spawn_object(self, num_1, num_2):
         # Размещаем объекты в карте

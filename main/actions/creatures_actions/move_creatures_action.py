@@ -1,17 +1,17 @@
 from main.actions.creatures_actions.path_finding import PathFinder
-from main.actions import action
+from main.actions.action import Actions
 from main.entity_object.animals.dynamic_object.herbivore import Herbivore
 from main.entity_object.animals.dynamic_object.predator import Predator
 from main.entity_object.static_objects.grass import Grass
 
 
-class MoveCreaturesAction(action.Actions):
+class MoveCreaturesAction(Actions):
     def __init__(self, matrix):
         """
         Класс для перемещения существ по карте
         :param matrix: Получает на вход карту
         """
-        self.matrix = matrix
+        self.__matrix = matrix
 
     def perform(self):
         self.__path_creatures()
@@ -25,9 +25,9 @@ class MoveCreaturesAction(action.Actions):
         """
         iterable_creatures_objects_list = []
 
-        for i in range(self.matrix.height+2):
-            for j in range(self.matrix.width+2):
-                checked_object = self.matrix.get_object(i, j)
+        for i in range(self.__matrix.height + 2):
+            for j in range(self.__matrix.width + 2):
+                checked_object = self.__matrix.get_object(i, j)
 
                 if isinstance(checked_object, (Herbivore, Predator)):
                     iterable_creatures_objects_list.append(checked_object)
@@ -35,10 +35,10 @@ class MoveCreaturesAction(action.Actions):
         for iterable_creature_oject in iterable_creatures_objects_list:
 
             if isinstance(iterable_creature_oject, Herbivore):
-                self.__creates_a_path(self.matrix, iterable_creature_oject, Grass)
+                self.__creates_a_path(self.__matrix, iterable_creature_oject, Grass)
 
             elif isinstance(iterable_creature_oject, Predator):
-                self.__creates_a_path(self.matrix, iterable_creature_oject, Herbivore)
+                self.__creates_a_path(self.__matrix, iterable_creature_oject, Herbivore)
 
     def __creates_a_path(self, matrix, creature, food):
         """
@@ -62,20 +62,35 @@ class MoveCreaturesAction(action.Actions):
         """
         # Список содержащий объекты координат
         path = path_list
-        creatures = self.matrix.get_object(path[0].x, path[0].y)
+        creatures = self.__matrix.get_object(path[0].x, path[0].y)
 
+        # Если длина пути больше чем скорость существа
+        # И на пермещаемой координате - нет никого
+        # Перемещаем существо по этим координатам
+        # Иначе перемещаем существо на клетку рядом с объектом
         if len(path) > creatures.speed:
-            if self.matrix.is_empty(path[creatures.speed].x, path[creatures.speed].y):
-                self.matrix.add_object(creatures, path[creatures.speed].x, path[creatures.speed].y)
-                self.matrix.change_object_coordinates(creatures, path[creatures.speed].x, path[creatures.speed].y)
-                self.matrix.delete_object(path[0].x, path[0].y)
-            else:
-                self.matrix.add_object(creatures, path[creatures.speed-1].x, path[creatures.speed-1].y)
-                self.matrix.change_object_coordinates(creatures, path[creatures.speed-1].x, path[creatures.speed-1].y)
-                self.matrix.delete_object(path[0].x, path[0].y)
 
-        elif len(path) > 2:
-            if self.matrix.is_empty(path[1].x, path[1].y):
-                self.matrix.add_object(creatures, path[1].x, path[1].y)
-                self.matrix.change_object_coordinates(creatures, path[1].x, path[1].y)
-                self.matrix.delete_object(path[0].x, path[0].y)
+            if self.__matrix.is_empty(path[creatures.speed].x, path[creatures.speed].y):
+                self.__works_with_map(creatures, path, creatures.speed)
+            else:
+                self.__works_with_map(creatures, path, creatures.speed-1)
+
+        # В остальных случаях перемещаем существо на одну соседнюю клетку
+        # При условии, что она пустая
+        else:
+
+            if self.__matrix.is_empty(path[1].x, path[1].y):
+                self.__works_with_map(creatures, path, 1)
+
+    def __works_with_map(self, creatures, path, speed):
+        """
+        Метод для работы с картой
+        Он удаляет и добавляет нужные элементы по нужным координатам
+        :param creatures: Объект класса существо
+        :param path: Список координат являющиеся путём
+        :param speed: Отвечает за сдвиг по списку с координатами
+        """
+        self.__matrix.add_object(creatures, path[speed].x, path[speed].y)
+        self.__matrix.change_object_coordinates(
+            creatures, path[speed].x, path[speed].y)
+        self.__matrix.delete_object(path[0].x, path[0].y)

@@ -1,17 +1,17 @@
-from main.actions import action
-from main import coordinate
+from main.actions.action import Actions
+from main.coordinate import Coordinates
 from main.entity_object.animals.dynamic_object.herbivore import Herbivore
 from main.entity_object.animals.dynamic_object.predator import Predator
 from main.entity_object.static_objects.grass import Grass
 
 
-class ActionEatObject(action.Actions):
+class ActionEatObject(Actions):
     def __init__(self, matrix):
         """
         Класс для поедания и атаки искомых объектов
         :param matrix: - Принимаем на вход карту
         """
-        self.matrix = matrix
+        self.__matrix = matrix
 
     def perform(self):
         self.__search_hunter()
@@ -23,14 +23,20 @@ class ActionEatObject(action.Actions):
         которые надо проверить
         Травоядное - охотится на траву
         Хищник - охотится на травоядное
-
         """
         creatures_objects_lists = []
 
-        for i in range(self.matrix.height+2):
-            for j in range(self.matrix.width+2):
-                if not self.matrix.is_empty(i, j):
-                    all_object = self.matrix.get_object(i, j)
+        """
+        Границы циклов обозначены +2, потому, что
+        необходим сдвиг из-за того что класс Map принимает 
+        числа N x M, а класс Render рисует нашу карту в консоли 
+        со сдвигом + 2, для более подробной информации - загляните 
+        в метод print_map класса Render
+        """
+        for i in range(self.__matrix.height + 2):
+            for j in range(self.__matrix.width + 2):
+                if not self.__matrix.is_empty(i, j):
+                    all_object = self.__matrix.get_object(i, j)
                     if isinstance(all_object, (Herbivore, Predator)):
                         creatures_objects_lists.append(all_object)
 
@@ -44,23 +50,31 @@ class ActionEatObject(action.Actions):
     def __search_food(self, creature_object, crd_x, crd_y):
         """
         Метод который будет смотреть
-        вокруг объекта на наличие еды
+        возле объекта на наличие еды
+        и вызывать методы поедания существ
         :param creature_object: объект охоты
         :param crd_x: координата принимающая сдвиг по x
         :param crd_y: координата принимающая сдвиг по у
         """
         creature = creature_object
-        coordinated = coordinate.Coordinates(creature.x, creature.y)
+        coordinated = Coordinates(creature.x, creature.y)
         # Проверяем не выходим ли за поле
-        if (0 <= coordinated.x + crd_x < self.matrix.height+1) and (0 <= coordinated.y + crd_y < self.matrix.width+1):
+        if (0 <= coordinated.x + crd_x <= self.__matrix.height) and (
+                0 <= coordinated.y + crd_y <= self.__matrix.width):
 
             # Проверяем не находятся ли объекты по этим координатам
-            if not self.matrix.is_empty(coordinated.x + crd_x, coordinated.y + crd_y):
-                coordinated = coordinate.Coordinates(coordinated.x + crd_x, coordinated.y + crd_y)
+            # Если - да, то сохраняем объект этих координат
+            if not self.__matrix.is_empty(coordinated.x + crd_x, coordinated.y + crd_y):
+                coordinated = Coordinates(coordinated.x + crd_x, coordinated.y + crd_y)
 
+                # Проверка принадлежит ли существо необходимому классу,
+                # а так же проверка находится ли по проверяемым координатам
+                # искомый объект.
+                # Если нашли - вызываем  соответсвующий метод данного класса
                 if isinstance(creature, Herbivore) and isinstance(
-                        self.matrix.get_object(coordinated.x, coordinated.y), Grass):
-                    creature.eat_grass(self.matrix, coordinated)
+                        self.__matrix.get_object(coordinated.x, coordinated.y), Grass):
+                    creature.eat_grass(self.__matrix, coordinated)
+
                 elif isinstance(creature, Predator) and isinstance(
-                        self.matrix.get_object(coordinated.x, coordinated.y), Herbivore):
-                    creature.attack(self.matrix, coordinated)
+                        self.__matrix.get_object(coordinated.x, coordinated.y), Herbivore):
+                    creature.attack(self.__matrix, coordinated)
