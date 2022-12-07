@@ -26,13 +26,6 @@ class ActionEatObject(Actions):
         """
         creatures_objects_lists = []
 
-        """
-        Границы циклов обозначены +2, потому, что
-        необходим сдвиг из-за того что класс Map принимает 
-        числа N x M, а класс Render рисует нашу карту в консоли 
-        со сдвигом + 2, для более подробной информации - загляните 
-        в метод print_map класса Render
-        """
         for i in range(self.__matrix.height + 2):
             for j in range(self.__matrix.width + 2):
                 if not self.__matrix.is_empty(i, j):

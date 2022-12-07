@@ -4,6 +4,10 @@ from main.entity_object.static_objects.rock import Rock
 
 class GenerationRock(Generate):
     def __init__(self, matrix):
+        """
+        Генерация Камня
+        :param matrix: принимает на вход объект класса карты
+        """
         super().__init__(matrix)
         # Необходимое количество камня на карте
         self._object_quantity = int(self.matrix_cells * 0.08)

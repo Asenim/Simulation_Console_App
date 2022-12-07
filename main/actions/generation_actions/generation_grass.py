@@ -4,6 +4,10 @@ from main.entity_object.static_objects.grass import Grass
 
 class GenerationGrass(Generate):
     def __init__(self, matrix):
+        """
+        Класс генерации Травы
+        :param matrix: принимает на вход объект класса карты
+        """
         super().__init__(matrix)
         # Необходимое количество травы на карте в зависимости от размера матрицы
         self._object_quantity = int(self.matrix_cells * 0.2)

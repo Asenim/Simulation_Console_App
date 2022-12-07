@@ -5,6 +5,10 @@ import random
 
 class GenerationHerbivore(Generate):
     def __init__(self, matrix):
+        """
+        Класс генерации Травоядного
+        :param matrix: принимает на вход объект класса карты
+        """
         super().__init__(matrix)
         # Количество травоядных
         self._object_quantity = 1

@@ -5,6 +5,10 @@ import random
 
 class GenerationPredator(Generate):
     def __init__(self, matrix):
+        """
+        Класс генерации Хищников
+        :param matrix: принимает на вход объект карты
+        """
         super().__init__(matrix)
         # Максимальное Количество хищников на карте
         self._object_quantity = 1

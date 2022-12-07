@@ -6,10 +6,13 @@ class PathFinder:
     def __init__(self, creature=None, food=None, matrix=None):
         """
         Общий класс поиска пути.
+        Инициализатор Добавляет первую координату,
+            на ноторой находится существо в очередь.
         На вход принимает параметры:
         :param creature: класс, который будет охотиться
         :param food: Принимает на вход класс на который ведется охота
         :param matrix: объект класса карты с которым будем работать
+
         """
         self.__matrix = matrix
         self.__creature = creature
@@ -29,7 +32,6 @@ class PathFinder:
         coordinate_list[-1] - это точка на которой расположена добыча, что бы встать "возле" добычи
         нужно исключить последний индекс
         """
-        # Работает пока очередь не пуста или не выполнено условие остановки
         while True:
             if len(self.__queue_of_pass) > 0:
                 coordinate_list = self.__queue_of_pass.popleft()
@@ -41,7 +43,6 @@ class PathFinder:
 
                 self.__set_of_visited.add(coordinate_list[-1])
 
-                # Останавливаем цикл и возвращаем искомый путь для дальнейшего пользования
                 if not self.__matrix.is_empty(coordinate_list[-1].x, coordinate_list[-1].y):
                     if isinstance(
                             self.__matrix.get_object(coordinate_list[-1].x, coordinate_list[-1].y),
@@ -52,24 +53,24 @@ class PathFinder:
             else:
                 return None
 
-    def __filling_queue(self, coordinates_list, crd_1, crd_2):
+    def __filling_queue(self, coordinates_list, crd_x, crd_y):
         """
         Метод заполняющий очередь массивом путей
         :param coordinates_list: принимаем массив координат.
-        :param crd_1: принимаем сдвиг по первой координате.
-        :param crd_2: принимаем сдвиг по второй координате.
+        :param crd_x: принимаем сдвиг по первой координате.
+        :param crd_y: принимаем сдвиг по второй координате.
         """
         current_position_coordinate = coordinates_list[-1]
 
         # Условие выхода за границы поля
-        if (0 < current_position_coordinate.x + crd_1 < self.__matrix.height + 1) and (
-                0 < current_position_coordinate.y + crd_2 < self.__matrix.width + 1):
+        if (0 < current_position_coordinate.x + crd_x < self.__matrix.height + 1) and (
+                0 < current_position_coordinate.y + crd_y < self.__matrix.width + 1):
 
             # Проверяем не находятся ли объекты по этим координатам
             if self.__matrix.is_empty(
-                    current_position_coordinate.x + crd_1, current_position_coordinate.y + crd_2):
+                    current_position_coordinate.x + crd_x, current_position_coordinate.y + crd_y):
                 adjeccent_coordinate = Coordinates(
-                    current_position_coordinate.x + crd_1, current_position_coordinate.y + crd_2)
+                    current_position_coordinate.x + crd_x, current_position_coordinate.y + crd_y)
 
                 # Проверка нет ли данных координат в множестве посещенных координат
                 if adjeccent_coordinate not in self.__set_of_visited:
@@ -78,11 +79,11 @@ class PathFinder:
             # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
             elif isinstance(
                     self.__matrix.get_object(
-                        current_position_coordinate.x + crd_1, current_position_coordinate.y + crd_2),
+                        current_position_coordinate.x + crd_x, current_position_coordinate.y + crd_y),
                     self.__food):
 
                 adjeccent_coordinate = Coordinates(
-                    current_position_coordinate.x + crd_1, current_position_coordinate.y + crd_2)
+                    current_position_coordinate.x + crd_x, current_position_coordinate.y + crd_y)
                 self.__new_path(coordinates_list, adjeccent_coordinate)
 
     def __new_path(self, path, coordinate):

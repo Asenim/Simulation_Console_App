@@ -15,7 +15,6 @@ class Map:
         else:
             print("Введите целые числа")
 
-        # Переменная в которой хранится карта (словарь)
         self.__dict_object = {}
 
     def add_object(self, objects, x, y):
@@ -67,6 +66,12 @@ class Map:
 
     @staticmethod
     def change_object_coordinates(creature, new_x, new_y):
+        """
+        Метод меняет поля координат существ, на новые
+        :param creature: Передаётся объект существа
+        :param new_x: Передаётся координата по х
+        :param new_y: Передаётся координата по у
+        """
         creature.x = new_x
         creature.y = new_y
 

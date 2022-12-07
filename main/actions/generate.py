@@ -8,11 +8,9 @@ class Generate(Actions):
         Промежуточный класс, от этого класса наследуется вся генерация объектов
         :param matrix: Принимаем объект карты
         """
-        # Абстрактное количество генерируемых объектов которые необходимо сгенерировать
         self._object_quantity = None
         self.matrix = matrix
 
-        # Количество клеток которое есть в матрице
         self.matrix_cells = self.matrix.height * self.matrix.width
 
     def perform(self):
