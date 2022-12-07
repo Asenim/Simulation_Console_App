@@ -21,6 +21,7 @@ class Simulation:
         self.__stop_loop = True
         self.__collection_stopped_button = ['f', 'F', 'А', 'а']
         self.__collection_step_rendering_button = ['s', 'S', 'Ы', 'ы']
+        self.__collection_pause_button = ['a', 'A', 'Ф', 'ф']
 
         self.__matrix = Map(self.height, self.width)
         self.__renderer = Render(self.__matrix)
@@ -56,6 +57,8 @@ class Simulation:
                     self.__user_stops_loop()
                 elif accept_button_press in self.__collection_step_rendering_button:
                     self.__step_rendering()
+                elif accept_button_press in self.__collection_pause_button:
+                    self.__pause_rendering()
 
             if not self.__auto_stops_the_loop():
                 self.__renderer.print_map()
@@ -120,6 +123,44 @@ class Simulation:
                     os.system('cls')
                     break
 
+    def __pause_rendering(self):
+        """
+        Метод для приостановки симуляции
+        """
+        while True:
+            self.__renderer.print_map()
+
+            print(f'Симуляция приостановлена. \n'
+                  f'Для выхода из состояния паузы - нажмите клавишу A. \n'
+                  f'Для запуска пошаговой симуляции - нажмите S. \n'
+                  f'Для остановки симуляции - нажмите F.')
+            sleep(5)
+            os.system('cls')
+
+            if msvcrt.kbhit():
+                user_press_button = msvcrt.getwch()
+
+                if user_press_button in self.__collection_pause_button:
+                    self.__renderer.print_map()
+                    print('Возобновляем бесконечную симуляцию...')
+                    sleep(3)
+                    os.system('cls')
+                    break
+
+                elif user_press_button in self.__collection_step_rendering_button:
+                    self.__renderer.print_map()
+                    print('Начинаем пошаговую симуляцию...')
+                    sleep(3)
+                    os.system('cls')
+                    return self.__step_rendering()
+
+                elif user_press_button in self.__collection_stopped_button:
+                    self.__renderer.print_map()
+                    print('Симуляция завершается...')
+                    self.__stop_loop = False
+                    sleep(3)
+                    break
+
     def __auto_stops_the_loop(self):
         """
         Счетчик для условия остановки нашего цикла While.
@@ -142,4 +183,4 @@ class Simulation:
 
 
 if __name__ == '__main__':
-    sim = Simulation(10, 10)
+    sim = Simulation(5, 15)

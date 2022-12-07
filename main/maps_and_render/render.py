@@ -93,9 +93,8 @@ class Render:
         """
         dict_display_user_control = {
             'S': 'Кнопка для пошаговой отрисовки симуляции',
-            'F': 'Кнопка для остановки симуляции',
-            'Y': 'Кнопка для Согласия',
-            'N': 'Кнопка для Отказа'
+            'A': 'Кнопка для паузы',
+            'F': 'Кнопка для остановки симуляции'
         }
 
         for button, description_button in dict_display_user_control.items():
