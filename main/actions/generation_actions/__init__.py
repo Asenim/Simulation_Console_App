@@ -1,0 +1,5 @@
+from main.actions.generation_actions.generation_tree import GenerationTree
+from main.actions.generation_actions.generation_rock import GenerationRock
+from main.actions.generation_actions.generation_grass import GenerationGrass
+from main.actions.generation_actions.generation_herbivore import GenerationHerbivore
+from main.actions.generation_actions.generation_predator import GenerationPredator

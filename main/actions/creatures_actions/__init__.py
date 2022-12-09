@@ -1,0 +1,2 @@
+from main.actions.creatures_actions.move_creatures_action import MoveCreaturesAction
+from main.actions.creatures_actions.action_eat_object import ActionEatObject

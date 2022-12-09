@@ -1,5 +1,4 @@
-from main.entity_object.animals.dynamic_object.herbivore import Herbivore
-from main.entity_object.animals.dynamic_object.predator import Predator
+from main.entitys.simulation_objects.dynamic_object import *
 
 
 class Render:

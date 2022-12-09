@@ -1,5 +1,5 @@
 from main.actions.generate import Generate
-from main.entity_object.static_objects.grass import Grass
+from main.entitys.simulation_objects.static_objects.grass import Grass
 
 
 class GenerationGrass(Generate):

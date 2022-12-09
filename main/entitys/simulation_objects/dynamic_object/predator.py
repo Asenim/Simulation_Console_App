@@ -1,7 +1,7 @@
-from main.entity_object.animals import creatures
+from main.entitys.creatures import Creatures
 
 
-class Predator(creatures.Creatures):
+class Predator(Creatures):
     def __init__(self, speed, hit_point, max_hit_point, gender,
                  successful_hunting, restore_hp_successful_hunt, range_attack, attack_power, x, y):
         """

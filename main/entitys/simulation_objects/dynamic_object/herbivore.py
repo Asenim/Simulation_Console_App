@@ -1,4 +1,4 @@
-from main.entity_object.animals.creatures import Creatures
+from main.entitys.creatures import Creatures
 
 
 class Herbivore(Creatures):

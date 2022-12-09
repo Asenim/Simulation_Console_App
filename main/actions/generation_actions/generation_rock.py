@@ -1,5 +1,5 @@
 from main.actions.generate import Generate
-from main.entity_object.static_objects.rock import Rock
+from main.entitys.simulation_objects.static_objects.rock import Rock
 
 
 class GenerationRock(Generate):

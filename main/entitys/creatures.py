@@ -1,7 +1,7 @@
-from main.entity_object import entity
+from main.entitys.entity import Entity
 
 
-class Creatures(entity.Entity):
+class Creatures(Entity):
     def __init__(self, speed, hit_point, max_hit_point, gender, x, y):
         """
         Головной класс от которого будут наследоваться все классы существ.

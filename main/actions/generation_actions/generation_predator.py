@@ -1,5 +1,5 @@
 from main.actions.generate import Generate
-from main.entity_object.animals.dynamic_object.predator import Predator
+from main.entitys.simulation_objects.dynamic_object.predator import Predator
 import random
 
 

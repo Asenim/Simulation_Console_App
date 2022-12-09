@@ -1,8 +1,7 @@
 from main.actions.creatures_actions.path_finding import PathFinder
 from main.actions.action import Actions
-from main.entity_object.animals.dynamic_object.herbivore import Herbivore
-from main.entity_object.animals.dynamic_object.predator import Predator
-from main.entity_object.static_objects.grass import Grass
+from main.entitys.simulation_objects.dynamic_object import *
+from main.entitys.simulation_objects.static_objects.grass import Grass
 
 
 class MoveCreaturesAction(Actions):
