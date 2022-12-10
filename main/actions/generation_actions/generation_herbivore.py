@@ -14,7 +14,6 @@ class GenerationHerbivore(Generate):
         self._object_quantity = 1
 
     def spawn_object(self, num_1, num_2):
-        # Размещаем объекты в карте
         self.matrix.add_object(Herbivore(speed=2, hit_point=10, max_hit_point=15,
                                          gender=random.choice(['male', 'female']),
                                          restore_hp_eat_grass=random.randint(1, 2),

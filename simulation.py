@@ -1,9 +1,6 @@
 import os
-# import msvcrt
-# from main.entitys.simulation_objects.dynamic_object.herbivore import Herbivore
 from main.maps_and_render import *
 from main.actions.generation_actions import *
-# from main.actions.creatures_actions import *
 from time import sleep
 from main.simulation_loop import SimulationLoop
 

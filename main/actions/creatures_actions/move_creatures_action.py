@@ -62,10 +62,6 @@ class MoveCreaturesAction(Actions):
         path = path_list
         creatures = self.__matrix.get_object(path[0].x, path[0].y)
 
-        # Если длина пути больше чем скорость существа
-        # И на пермещаемой координате - нет никого
-        # Перемещаем существо по этим координатам
-        # Иначе перемещаем существо на клетку рядом с объектом
         if len(path) > creatures.speed:
 
             if self.__matrix.is_empty(path[creatures.speed].x, path[creatures.speed].y):
@@ -73,8 +69,6 @@ class MoveCreaturesAction(Actions):
             else:
                 self.__works_with_map(creatures, path, creatures.speed-1)
 
-        # В остальных случаях перемещаем существо на одну соседнюю клетку
-        # При условии, что она пустая
         else:
 
             if self.__matrix.is_empty(path[1].x, path[1].y):

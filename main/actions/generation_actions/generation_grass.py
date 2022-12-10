@@ -50,7 +50,6 @@ class GenerationGrass(Generate):
         генерации координат случайного расположения
         объектов на карте.
         """
-        # Основной цикл Генерации
         for i in range(self._object_quantity // 2):
             # Генерация случайных индексов матрицы
             num_1, num_2 = self.random_coordinates()
@@ -58,7 +57,7 @@ class GenerationGrass(Generate):
             self.spawn_object(num_1, num_2)
 
     def spawn_object(self, num_1, num_2):
-        # Размещаем объекты в карте
         self.matrix.add_object(Grass(num_1, num_2), num_1, num_2)
-        # После расположения объектов на матрице - Обнуляем счётчик для корректной работы generate
+        # После расположения объектов на матрице - Обнуляем счётчик
+        # для корректной работы функции доспаунивания травы
         self.count_object = 0

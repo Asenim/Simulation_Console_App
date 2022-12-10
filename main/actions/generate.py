@@ -26,7 +26,6 @@ class Generate(Actions):
         генерации координат случайного расположения
         объектов на карте.
         """
-        # Основной цикл Генерации
         for i in range(self._object_quantity):
             # Генерация случайных индексов матрицы
             num_1, num_2 = self.random_coordinates()

@@ -13,5 +13,4 @@ class GenerationRock(Generate):
         self._object_quantity = int(self.matrix_cells * 0.08)
 
     def spawn_object(self, num_1, num_2):
-        # Размещаем объекты в карте
         self.matrix.add_object(Rock(num_1, num_2), num_1, num_2)

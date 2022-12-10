@@ -50,19 +50,13 @@ class ActionEatObject(Actions):
         """
         creature = creature_object
         coordinated = Coordinates(creature.x, creature.y)
-        # Проверяем не выходим ли за поле
+
         if (0 <= coordinated.x + crd_x <= self.__matrix.height) and (
                 0 <= coordinated.y + crd_y <= self.__matrix.width):
 
-            # Проверяем не находятся ли объекты по этим координатам
-            # Если - да, то сохраняем объект этих координат
             if not self.__matrix.is_empty(coordinated.x + crd_x, coordinated.y + crd_y):
                 coordinated = Coordinates(coordinated.x + crd_x, coordinated.y + crd_y)
 
-                # Проверка принадлежит ли существо необходимому классу,
-                # а так же проверка находится ли по проверяемым координатам
-                # искомый объект.
-                # Если нашли - вызываем  соответсвующий метод данного класса
                 if isinstance(creature, Herbivore) and isinstance(
                         self.__matrix.get_object(coordinated.x, coordinated.y), Grass):
                     creature.eat_grass(self.__matrix, coordinated)

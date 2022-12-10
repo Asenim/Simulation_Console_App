@@ -17,7 +17,7 @@ class PathFinder:
         self.__matrix = matrix
         self.__creature = creature
         self.__food = food
-        # Инициализируем очередь, множество и коллекцию для посещенных объектов
+
         self.__queue_of_pass = deque()
         self.__set_of_visited = set()
 
@@ -62,21 +62,17 @@ class PathFinder:
         """
         current_position_coordinate = coordinates_list[-1]
 
-        # Условие выхода за границы поля
         if (0 < current_position_coordinate.x + crd_x < self.__matrix.height + 1) and (
                 0 < current_position_coordinate.y + crd_y < self.__matrix.width + 1):
 
-            # Проверяем не находятся ли объекты по этим координатам
             if self.__matrix.is_empty(
                     current_position_coordinate.x + crd_x, current_position_coordinate.y + crd_y):
                 adjeccent_coordinate = Coordinates(
                     current_position_coordinate.x + crd_x, current_position_coordinate.y + crd_y)
 
-                # Проверка нет ли данных координат в множестве посещенных координат
                 if adjeccent_coordinate not in self.__set_of_visited:
                     self.__new_path(coordinates_list, adjeccent_coordinate)
 
-            # Если вдруг по проверяемым координатам находится искомый объект - то добавляем его в очередь
             elif isinstance(
                     self.__matrix.get_object(
                         current_position_coordinate.x + crd_x, current_position_coordinate.y + crd_y),

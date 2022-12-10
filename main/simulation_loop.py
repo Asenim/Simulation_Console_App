@@ -8,6 +8,13 @@ from main.entitys.simulation_objects.dynamic_object.herbivore import Herbivore
 
 class SimulationLoop:
     def __init__(self, matrix, render):
+        """
+        Класс отвечает за бесконечную симуляцию нашей игры
+        А так же за взаимодействие с пользователем во время игры
+        :param matrix: Принимает Карту
+        :param render: Принимаем объект рендера
+        """
+        self.__count_move = 0
         self.__matrix = matrix
         self.__renderer = render
 
@@ -17,10 +24,14 @@ class SimulationLoop:
         self.__collection_pause_button = ['a', 'A', 'Ф', 'ф']
 
     def simulation_loop(self):
+        """
+        Главный Метод запускающий бесконечную симуляцию.
+        """
         while self.__stop_loop:
+            self.__count_move = self.__count_move + 1
             self.__iterates_action()
 
-            self.__renderer.print_map()
+            self.__renderer.print_map(move_count=self.__count_move)
             sleep(1)
             os.system('cls')
 
@@ -35,7 +46,7 @@ class SimulationLoop:
                     self.__pause_rendering()
 
             if not self.__auto_stops_the_loop():
-                self.__renderer.print_map()
+                self.__renderer.print_map(self.__count_move)
                 break
 
     def __iterates_action(self):
@@ -55,7 +66,7 @@ class SimulationLoop:
         """
         Метод останавливает наш игровой цикл и завершает игру
         """
-        self.__renderer.print_map()
+        self.__renderer.print_map(self.__count_move)
         print('Симуляция завершена пользователем')
         self.__stop_loop = False
         sleep(1)
@@ -65,15 +76,16 @@ class SimulationLoop:
         Метод для пошаговой отрисовки игры
         """
         while True:
-            self.__renderer.print_map()
+            self.__renderer.print_map(self.__count_move)
             print(f'Что бы выйти из пошаговой Симуляции: \n'
                   f'ВО ВРЕМЯ пошаговой симуляции нажмите кнопку S')
             int_input_keyboard = int(input('Введите количество ходов симуляции '))
             os.system('cls')
 
             while int_input_keyboard != 0:
+                self.__count_move = self.__count_move + 1
                 self.__iterates_action()
-                self.__renderer.print_map()
+                self.__renderer.print_map(self.__count_move)
                 print('Нажмите S для выхода из пошаговой Симуляции')
 
                 int_input_keyboard = int_input_keyboard - 1
@@ -90,7 +102,7 @@ class SimulationLoop:
                 user_press_button = msvcrt.getwch()
 
                 if user_press_button in self.__collection_step_rendering_button:
-                    self.__renderer.print_map()
+                    self.__renderer.print_map(self.__count_move)
                     print('Вы вышли из пошаговой отрисовки симуляции')
                     print('Возвращаемся в бесконечную симуляцию. . .')
                     sleep(2)
@@ -102,7 +114,7 @@ class SimulationLoop:
         Метод для приостановки симуляции
         """
         while True:
-            self.__renderer.print_map()
+            self.__renderer.print_map(self.__count_move)
 
             print(f'Симуляция приостановлена. \n'
                   f'Для выхода из состояния паузы - нажмите клавишу A. \n'
@@ -115,21 +127,21 @@ class SimulationLoop:
                 user_press_button = msvcrt.getwch()
 
                 if user_press_button in self.__collection_pause_button:
-                    self.__renderer.print_map()
+                    self.__renderer.print_map(self.__count_move)
                     print('Возобновляем бесконечную симуляцию...')
                     sleep(3)
                     os.system('cls')
                     break
 
                 elif user_press_button in self.__collection_step_rendering_button:
-                    self.__renderer.print_map()
+                    self.__renderer.print_map(self.__count_move)
                     print('Начинаем пошаговую симуляцию...')
                     sleep(3)
                     os.system('cls')
                     return self.__step_rendering()
 
                 elif user_press_button in self.__collection_stopped_button:
-                    self.__renderer.print_map()
+                    self.__renderer.print_map(self.__count_move)
                     print('Симуляция завершается...')
                     self.__stop_loop = False
                     sleep(3)

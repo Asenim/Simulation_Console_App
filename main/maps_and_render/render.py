@@ -2,14 +2,16 @@ from main.entitys.simulation_objects.dynamic_object import *
 
 
 class Render:
-    def __init__(self, matrix):
+    def __init__(self, matrix, move_counter=None):
         """
         Отрисовка карты и статуса существ
         :param matrix: Принимаем на вход объект карты
+        :param move_counter: Принимаем на вход счетчик
         """
         self.__matrix = matrix
+        self.__move_counter = move_counter
 
-    def print_map(self):
+    def print_map(self, move_count=None):
         """
         Отрисовка нашей карты в консоли
         Сдвиг на +2 сделан для корректного добавления границ карты
@@ -24,6 +26,7 @@ class Render:
             action_eat_object: __search_hunter, __search_food
         """
         self.__displays_statistics()
+        self.__draws_counter_of_moves(move_count)
 
         for x in range(self.__matrix.height + 2):
             for y in range(self.__matrix.width + 2):
@@ -65,6 +68,16 @@ class Render:
                       f'Скорость = {creature_iteration.speed}; '
                       f'Здоровье - {creature_iteration.hit_point}; '
                       f'Регенерация - {creature_iteration.restore_hp_eat_grass}')
+
+    @staticmethod
+    def __draws_counter_of_moves(move_count):
+        """
+        Вывод счетчика ходов.
+        """
+        if move_count is not None:
+            print(f'{10*"-"} Ход номер - {move_count} {10*"-"}')
+        else:
+            print(f'{10*"-"} Ход номер - 0 {10*"-"}')
 
     @staticmethod
     def __displays_information():

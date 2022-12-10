@@ -14,7 +14,6 @@ class GenerationPredator(Generate):
         self._object_quantity = 1
 
     def spawn_object(self, num_1, num_2):
-        # Размещаем объекты в карте
         self.matrix.add_object(Predator(speed=random.randint(2, 4),
                                         hit_point=5, max_hit_point=5,
                                         gender=random.choice(['male', 'female']),
